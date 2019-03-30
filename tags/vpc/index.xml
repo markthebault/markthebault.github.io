@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vpc on Mark Thebault</title>
+    <link>https://www.mark-thebault.pro/tags/vpc/</link>
+    <description>Recent content in Vpc on Mark Thebault</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zn-Hans</language>
+    <lastBuildDate>Wed, 01 Aug 2018 10:23:48 +0800</lastBuildDate>
+    
+	<atom:link href="https://www.mark-thebault.pro/tags/vpc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Get connected! Transit VPC on AWS</title>
+      <link>https://www.mark-thebault.pro/articles/2018/transit-vpc/</link>
+      <pubDate>Wed, 01 Aug 2018 10:23:48 +0800</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2018/transit-vpc/</guid>
+      <description>Open Source Transit VPC on AWS This project will setup the necessary elements to create a transit VPC. I will include a packer step to build our router image. This router will be based on the VyOS 1.1.7. The AMI could also be found on the AWS Market place for a very decent price.
+Terraform will be used to provision the infrastructure. Combinated with python scripts terraform will also generate the IPSec configuration. The IPSec configuration will be pushed by ssh, so make sure your private key is added to your ssh-agent.
+Before starting You need to install terraform, packer and some python libs pip install -R tools/requirements.txt
+Clone the repo:
+git clone https://github.com/markthebault/aws-swarm-cluster-for-production.git  Run all You can easily deploy everything using the following command make all at the root project. This will lunch sequencialy the following makes: - vyos-image : create a vpc and build the AMI, tear down the vpc - terraform-network: create all the environment - vpn-generated-configurations: push the VPN conf into our VYOS router :)
+VyOS generation In order to allow packer to build our AMI, packer needs to create an instance in a public subnet to boot and install the necessary dependencies for running VyOS.</description>
+    </item>
+    
+  </channel>
+</rss>

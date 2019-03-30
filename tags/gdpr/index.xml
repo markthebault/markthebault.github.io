@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Gdpr on Mark Thebault</title>
+    <link>https://www.mark-thebault.pro/tags/gdpr/</link>
+    <description>Recent content in Gdpr on Mark Thebault</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zn-Hans</language>
+    <lastBuildDate>Sat, 18 Aug 2018 20:14:59 +0800</lastBuildDate>
+    
+	<atom:link href="https://www.mark-thebault.pro/tags/gdpr/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GDPR Compliant? Let&#39;s check!</title>
+      <link>https://www.mark-thebault.pro/articles/2019/pii-data-checker/</link>
+      <pubDate>Sat, 18 Aug 2018 20:14:59 +0800</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2019/pii-data-checker/</guid>
+      <description>Checking PII data on large datasets This repository contains a simple PySpark notebook that reads thought each line of a given Spark dataframe to extract all pii values. There is a check at two levels, the first one is at the column name level and the second one consists on checking each cell all the dataframe. Get started by cloning the repo:
+git clone https://github.com/markthebault/pii-check-spark.git  Interpret the PII check If the check at the column level is positive, that does not necessarily means that the dataframe contains PII data. In case of a cell check level positive there is a very good chance that this dataframe contains pii data
+The algorithm used Columns The Pii check consist in first checking the columns, typical columns names are used for pii value (such as name, address, phone&amp;hellip;.). The algorithms read the column name and perform a ratio of similarity to the tipical Pii data columns names. If the results is superior at 0.85 percent then we consider than the column is a PII column.
+The cells To check if a cell contains a PII value, the algorithm runs it against some REGEX to check the value: - Name check - Email - Phone number - Street addresses - IPs - Credit card number In order to check the Names of the a person, in the python code the is a list of provided Names.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Aws on Mark Thebault</title>
+    <link>https://www.mark-thebault.pro/tags/aws/</link>
+    <description>Recent content in Aws on Mark Thebault</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zn-Hans</language>
+    <lastBuildDate>Fri, 01 Mar 2019 15:49:22 +0800</lastBuildDate>
+    
+	<atom:link href="https://www.mark-thebault.pro/tags/aws/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Running Docker Swarm in AWS</title>
+      <link>https://www.mark-thebault.pro/articles/2018/docker-swarm/</link>
+      <pubDate>Fri, 01 Mar 2019 15:49:22 +0800</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2018/docker-swarm/</guid>
+      <description>Swarm cluster for AWS Setup a swarm cluster production ready haven&amp;rsquo;t been so easy !
+This is a bootstrap project, which creates 6 swarm nodes, 3 managers and 3 workers.
+All Swarm nodes are in a single private subnet and they have access to internet via a Nat Gateway in the public subnet.
+There is also a Bastion Host to configure and SSH the swarm nodes. A default Elastic Load Balancer is created also that listens the trafic on TCP:3543 of all swarm nodes and load balance TCP trafic comming from the internet on the port 80.
+You can find a more detailled view as above: Get started Clone the repo:
+git clone https://github.com/markthebault/aws-swarm-cluster-for-production.git  Boostraping a Swarm cluster in AWS This project uses CoreOS images on alpha version (to get the last updates from docker)
+1/ Provisionning of the infrastructure Make sure you environment contains the following variables:
+export AWS_ACCESS_KEY_ID=&amp;lt;your access key&amp;gt; export AWS_SECRET_ACCESS_KEY=&amp;lt;your secrect key&amp;gt;  Create a file terraform.tfvars in ./terraform
+Example:
+control_cidr = &amp;quot;10.234.231.21/32&amp;quot; owner = &amp;quot;Mark&amp;quot; default_keypair_name = &amp;quot;swarm-clstr-kp&amp;quot; default_keypair_path = &amp;quot;~/.ssh/swarm-clstr-kp.pem&amp;quot;  Execute terraform plan to see what will be created and terraform apply to start terraforming ;)
+Quick start To start even faster just run the make file make up, this will create the infrastructure and provisionning the VMs.</description>
+    </item>
+    
+    <item>
+      <title>Build a Kubernetes cluster with Kops</title>
+      <link>https://www.mark-thebault.pro/articles/2018/kops-kubernetes-aws/</link>
+      <pubDate>Mon, 13 Aug 2018 00:14:19 +0800</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2018/kops-kubernetes-aws/</guid>
+      <description> Kubernetes cluster creation using Kops and terraform Create the kubernetes resources with terraform, generate the cluster configuration with Kops. This repo is an adaptation of this module
+Get started Clone the repository and make it yours
+git clone https://github.com/markthebault/kubernetes-kops-terraform.git  Create the cluster You need to have terraform and kop installed to your computer.
+terraform init terraform plan --out=plan.out terraform apply plan.out cat ~/.kube/config  This cluster is private, that means there is no way to access it from the internet. You will need to use a bastion to access the cluster. A bastion host is provided with the key that is exported under key.pem. This key will not be committed, so don&amp;rsquo;t loose it ;)
+Module usage the modules is located under ./modules/
+module &amp;quot;kops&amp;quot; { source = &amp;quot;modules/tf-kops-cluster&amp;quot; sg_allow_ssh = &amp;quot;${aws_security_group.allow_ssh.id}&amp;quot; sg_allow_http_s = &amp;quot;${aws_security_group.allow_http.id}&amp;quot; cluster_name = &amp;quot;${var.cluster_name}&amp;quot; cluster_fqdn = &amp;quot;${var.cluster_name}.${aws_route53_zone.main.name}&amp;quot; route53_zone_id = &amp;quot;${aws_route53_zone.main.id}&amp;quot; kops_s3_bucket_arn = &amp;quot;${aws_s3_bucket.kops.arn}&amp;quot; kops_s3_bucket_id = &amp;quot;${aws_s3_bucket.kops.id}&amp;quot; vpc_id = &amp;quot;${module.vpc.vpc_id}&amp;quot; instance_key_name = &amp;quot;${aws_key_pair.generated_key.key_name}&amp;quot; internet_gateway_id = &amp;quot;${module.vpc.igw_id}&amp;quot; master_instance_type = &amp;quot;t2.medium&amp;quot; node_instance_type = &amp;quot;t2.medium&amp;quot; kubernetes_version = &amp;quot;${var.kubernetes_version}&amp;quot; kops_dns_mode = &amp;quot;private&amp;quot; public_subnet_cidr_blocks = &amp;quot;${var.kubernetes_public_subnets_cidr}&amp;quot; #For the LB private_subnet_ids = &amp;quot;${module.vpc.private_subnets}&amp;quot; }  </description>
+    </item>
+    
+    <item>
+      <title>Get connected! Transit VPC on AWS</title>
+      <link>https://www.mark-thebault.pro/articles/2018/transit-vpc/</link>
+      <pubDate>Wed, 01 Aug 2018 10:23:48 +0800</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2018/transit-vpc/</guid>
+      <description>Open Source Transit VPC on AWS This project will setup the necessary elements to create a transit VPC. I will include a packer step to build our router image. This router will be based on the VyOS 1.1.7. The AMI could also be found on the AWS Market place for a very decent price.
+Terraform will be used to provision the infrastructure. Combinated with python scripts terraform will also generate the IPSec configuration. The IPSec configuration will be pushed by ssh, so make sure your private key is added to your ssh-agent.
+Before starting You need to install terraform, packer and some python libs pip install -R tools/requirements.txt
+Clone the repo:
+git clone https://github.com/markthebault/aws-swarm-cluster-for-production.git  Run all You can easily deploy everything using the following command make all at the root project. This will lunch sequencialy the following makes: - vyos-image : create a vpc and build the AMI, tear down the vpc - terraform-network: create all the environment - vpn-generated-configurations: push the VPN conf into our VYOS router :)
+VyOS generation In order to allow packer to build our AMI, packer needs to create an instance in a public subnet to boot and install the necessary dependencies for running VyOS.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Terrafrom on Mark Thebault</title>
+    <link>https://www.mark-thebault.pro/tags/terrafrom/</link>
+    <description>Recent content in Terrafrom on Mark Thebault</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zn-Hans</language>
+    <lastBuildDate>Mon, 13 Aug 2018 00:14:19 +0800</lastBuildDate>
+    
+	<atom:link href="https://www.mark-thebault.pro/tags/terrafrom/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Build a Kubernetes cluster with Kops</title>
+      <link>https://www.mark-thebault.pro/articles/2018/kops-kubernetes-aws/</link>
+      <pubDate>Mon, 13 Aug 2018 00:14:19 +0800</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2018/kops-kubernetes-aws/</guid>
+      <description> Kubernetes cluster creation using Kops and terraform Create the kubernetes resources with terraform, generate the cluster configuration with Kops. This repo is an adaptation of this module
+Get started Clone the repository and make it yours
+git clone https://github.com/markthebault/kubernetes-kops-terraform.git  Create the cluster You need to have terraform and kop installed to your computer.
+terraform init terraform plan --out=plan.out terraform apply plan.out cat ~/.kube/config  This cluster is private, that means there is no way to access it from the internet. You will need to use a bastion to access the cluster. A bastion host is provided with the key that is exported under key.pem. This key will not be committed, so don&amp;rsquo;t loose it ;)
+Module usage the modules is located under ./modules/
+module &amp;quot;kops&amp;quot; { source = &amp;quot;modules/tf-kops-cluster&amp;quot; sg_allow_ssh = &amp;quot;${aws_security_group.allow_ssh.id}&amp;quot; sg_allow_http_s = &amp;quot;${aws_security_group.allow_http.id}&amp;quot; cluster_name = &amp;quot;${var.cluster_name}&amp;quot; cluster_fqdn = &amp;quot;${var.cluster_name}.${aws_route53_zone.main.name}&amp;quot; route53_zone_id = &amp;quot;${aws_route53_zone.main.id}&amp;quot; kops_s3_bucket_arn = &amp;quot;${aws_s3_bucket.kops.arn}&amp;quot; kops_s3_bucket_id = &amp;quot;${aws_s3_bucket.kops.id}&amp;quot; vpc_id = &amp;quot;${module.vpc.vpc_id}&amp;quot; instance_key_name = &amp;quot;${aws_key_pair.generated_key.key_name}&amp;quot; internet_gateway_id = &amp;quot;${module.vpc.igw_id}&amp;quot; master_instance_type = &amp;quot;t2.medium&amp;quot; node_instance_type = &amp;quot;t2.medium&amp;quot; kubernetes_version = &amp;quot;${var.kubernetes_version}&amp;quot; kops_dns_mode = &amp;quot;private&amp;quot; public_subnet_cidr_blocks = &amp;quot;${var.kubernetes_public_subnets_cidr}&amp;quot; #For the LB private_subnet_ids = &amp;quot;${module.vpc.private_subnets}&amp;quot; }  </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cluster on Mark Thebault</title>
+    <link>https://www.mark-thebault.pro/tags/cluster/</link>
+    <description>Recent content in Cluster on Mark Thebault</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zn-Hans</language>
+    <lastBuildDate>Fri, 01 Mar 2019 15:49:22 +0800</lastBuildDate>
+    
+	<atom:link href="https://www.mark-thebault.pro/tags/cluster/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Running Docker Swarm in AWS</title>
+      <link>https://www.mark-thebault.pro/articles/2018/docker-swarm/</link>
+      <pubDate>Fri, 01 Mar 2019 15:49:22 +0800</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2018/docker-swarm/</guid>
+      <description>Swarm cluster for AWS Setup a swarm cluster production ready haven&amp;rsquo;t been so easy !
+This is a bootstrap project, which creates 6 swarm nodes, 3 managers and 3 workers.
+All Swarm nodes are in a single private subnet and they have access to internet via a Nat Gateway in the public subnet.
+There is also a Bastion Host to configure and SSH the swarm nodes. A default Elastic Load Balancer is created also that listens the trafic on TCP:3543 of all swarm nodes and load balance TCP trafic comming from the internet on the port 80.
+You can find a more detailled view as above: Get started Clone the repo:
+git clone https://github.com/markthebault/aws-swarm-cluster-for-production.git  Boostraping a Swarm cluster in AWS This project uses CoreOS images on alpha version (to get the last updates from docker)
+1/ Provisionning of the infrastructure Make sure you environment contains the following variables:
+export AWS_ACCESS_KEY_ID=&amp;lt;your access key&amp;gt; export AWS_SECRET_ACCESS_KEY=&amp;lt;your secrect key&amp;gt;  Create a file terraform.tfvars in ./terraform
+Example:
+control_cidr = &amp;quot;10.234.231.21/32&amp;quot; owner = &amp;quot;Mark&amp;quot; default_keypair_name = &amp;quot;swarm-clstr-kp&amp;quot; default_keypair_path = &amp;quot;~/.ssh/swarm-clstr-kp.pem&amp;quot;  Execute terraform plan to see what will be created and terraform apply to start terraforming ;)
+Quick start To start even faster just run the make file make up, this will create the infrastructure and provisionning the VMs.</description>
+    </item>
+    
+  </channel>
+</rss>
