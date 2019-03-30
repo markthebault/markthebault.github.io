@@ -33,14 +33,20 @@
   </url>
   
   <url>
+    <loc>https://www.mark-thebault.pro/tags/aws/</loc>
+    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.mark-thebault.pro/categories/aws/</loc>
     <lastmod>2018-08-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://www.mark-thebault.pro/tags/aws/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <loc>https://www.mark-thebault.pro/tags/bigdata/</loc>
+    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -52,12 +58,6 @@
   
   <url>
     <loc>https://www.mark-thebault.pro/categories/bigdata/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mark-thebault.pro/tags/bigdata/</loc>
     <lastmod>2018-08-18T20:14:59+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -75,13 +75,13 @@
   </url>
   
   <url>
-    <loc>https://www.mark-thebault.pro/categories/docker/</loc>
+    <loc>https://www.mark-thebault.pro/tags/docker/</loc>
     <lastmod>2018-08-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://www.mark-thebault.pro/tags/docker/</loc>
+    <loc>https://www.mark-thebault.pro/categories/docker/</loc>
     <lastmod>2018-08-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
@@ -117,6 +117,12 @@
   </url>
   
   <url>
+    <loc>https://www.mark-thebault.pro/tags/kubernetes/</loc>
+    <lastmod>2018-08-13T00:14:19+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.mark-thebault.pro/series/kubernetes/</loc>
     <lastmod>2018-08-13T00:14:19+08:00</lastmod>
     <priority>0</priority>
@@ -124,12 +130,6 @@
   
   <url>
     <loc>https://www.mark-thebault.pro/categories/kubernetes/</loc>
-    <lastmod>2018-08-13T00:14:19+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mark-thebault.pro/tags/kubernetes/</loc>
     <lastmod>2018-08-13T00:14:19+08:00</lastmod>
     <priority>0</priority>
   </url>
