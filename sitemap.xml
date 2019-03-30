@@ -3,8 +3,18 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://www.mark-thebault.pro/articles/2019/spark-k8s/</loc>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://www.mark-thebault.pro/articles/2018/docker-swarm/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://www.mark-thebault.pro/articles/2019/pii-data-checker/</loc>
+    <lastmod>2019-02-18T20:14:59+08:00</lastmod>
   </url>
   
   <url>
@@ -18,11 +28,6 @@
   </url>
   
   <url>
-    <loc>https://www.mark-thebault.pro/articles/2019/pii-data-checker/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://www.mark-thebault.pro/articles/2018/kops-kubernetes-aws/</loc>
     <lastmod>2018-08-13T00:14:19+08:00</lastmod>
   </url>
@@ -33,32 +38,32 @@
   </url>
   
   <url>
+    <loc>https://www.mark-thebault.pro/tags/aws/</loc>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.mark-thebault.pro/categories/aws/</loc>
     <lastmod>2018-08-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://www.mark-thebault.pro/tags/aws/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <loc>https://www.mark-thebault.pro/tags/bigdata/</loc>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/series/bigdata/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/categories/bigdata/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mark-thebault.pro/tags/bigdata/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -70,19 +75,19 @@
   
   <url>
     <loc>https://www.mark-thebault.pro/tags/cluster/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mark-thebault.pro/categories/docker/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/tags/docker/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.mark-thebault.pro/categories/docker/</loc>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -94,19 +99,19 @@
   
   <url>
     <loc>https://www.mark-thebault.pro/tags/gdpr/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
+    <lastmod>2019-02-18T20:14:59+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/series/infrastructure/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/tags/jupyter/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -117,26 +122,26 @@
   </url>
   
   <url>
+    <loc>https://www.mark-thebault.pro/tags/kubernetes/</loc>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://www.mark-thebault.pro/series/kubernetes/</loc>
-    <lastmod>2018-08-13T00:14:19+08:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/categories/kubernetes/</loc>
-    <lastmod>2018-08-13T00:14:19+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.mark-thebault.pro/tags/kubernetes/</loc>
-    <lastmod>2018-08-13T00:14:19+08:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -148,25 +153,25 @@
   
   <url>
     <loc>https://www.mark-thebault.pro/series/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/tags/spark/</loc>
-    <lastmod>2018-08-18T20:14:59+08:00</lastmod>
+    <lastmod>2019-03-30T11:20:37-04:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/tags/swarm/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://www.mark-thebault.pro/tags/</loc>
-    <lastmod>2018-08-05T00:00:00+00:00</lastmod>
+    <lastmod>2019-03-01T15:49:22+08:00</lastmod>
     <priority>0</priority>
   </url>
   

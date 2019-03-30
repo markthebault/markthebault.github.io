@@ -6,10 +6,21 @@
     <description>Recent content in Kubernetes on Mark Thebault</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zn-Hans</language>
-    <lastBuildDate>Mon, 13 Aug 2018 00:14:19 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 30 Mar 2019 11:20:37 -0400</lastBuildDate>
     
 	<atom:link href="https://www.mark-thebault.pro/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Apache Spark, the new way!</title>
+      <link>https://www.mark-thebault.pro/articles/2019/spark-k8s/</link>
+      <pubDate>Sat, 30 Mar 2019 11:20:37 -0400</pubDate>
+      
+      <guid>https://www.mark-thebault.pro/articles/2019/spark-k8s/</guid>
+      <description>BigData analytics on Kubernetes Bigdata is a big topic since 2009, every company is seeking to process and extract information from the data that they stores. Making a complete environment from storing the data to presenting it in a simple way has been very challengin for the past years. Lot of solutions came out in the market filling just a small gap, but when you try to link everything together the BigData architecture become very complex and involves lot of different frameworks.
+There is 4 different element of a bigdata environment: * Storing the data * Processing the data * Showing the analysis * Governing the data
+In this short paper we will concentrate only on the second part, processing the data, more specifically processing batch data. There is lot of processing framework out there like Apache Spark, Apache Flink, Google DataFlow, Apache Pig&amp;hellip; The solution most conventionally used, it&amp;rsquo;s Apache Spark. I stated to use Spark since the version 1.5, today the last version is the 2.4.0. Lot of things have improved since back then. Before to run a spark cluster was not an easy task, either you have an Hadoop cluster and you run spark using Yarn as a scheduler.</description>
+    </item>
     
     <item>
       <title>Build a Kubernetes cluster with Kops</title>

@@ -6,7 +6,7 @@
     <description>Recent content in Gdpr on Mark Thebault</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zn-Hans</language>
-    <lastBuildDate>Sat, 18 Aug 2018 20:14:59 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 18 Feb 2019 20:14:59 +0800</lastBuildDate>
     
 	<atom:link href="https://www.mark-thebault.pro/tags/gdpr/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>GDPR Compliant? Let&#39;s check!</title>
       <link>https://www.mark-thebault.pro/articles/2019/pii-data-checker/</link>
-      <pubDate>Sat, 18 Aug 2018 20:14:59 +0800</pubDate>
+      <pubDate>Mon, 18 Feb 2019 20:14:59 +0800</pubDate>
       
       <guid>https://www.mark-thebault.pro/articles/2019/pii-data-checker/</guid>
       <description>Checking PII data on large datasets This repository contains a simple PySpark notebook that reads thought each line of a given Spark dataframe to extract all pii values. There is a check at two levels, the first one is at the column name level and the second one consists on checking each cell all the dataframe. Get started by cloning the repo:

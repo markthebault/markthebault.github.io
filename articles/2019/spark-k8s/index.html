@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zn-Hans">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1" />
+  <meta name="author" content="Mark Thebault">
+  <meta name="description" content="BigData analytics on Kubernetes Bigdata is a big topic since 2009, every company is seeking to process and extract information from the data that they stores. Making a complete environment from storing the data to presenting it in a simple way has been very challengin for the past years. Lot of solutions came out in the market filling just a small gap, but when you try to link everything together the BigData architecture become very complex and involves lot of different frameworks.
+There is 4 different element of a bigdata environment: * Storing the data * Processing the data * Showing the analysis * Governing the data
+In this short paper we will concentrate only on the second part, processing the data, more specifically processing batch data. There is lot of processing framework out there like Apache Spark, Apache Flink, Google DataFlow, Apache Pig&hellip; The solution most conventionally used, it&rsquo;s Apache Spark. I stated to use Spark since the version 1.5, today the last version is the 2.4.0. Lot of things have improved since back then. Before to run a spark cluster was not an easy task, either you have an Hadoop cluster and you run spark using Yarn as a scheduler.">
+  
+  <meta property="og:title" content="Apache Spark, the new way!" />
+<meta property="og:description" content="BigData analytics on Kubernetes Bigdata is a big topic since 2009, every company is seeking to process and extract information from the data that they stores. Making a complete environment from storing the data to presenting it in a simple way has been very challengin for the past years. Lot of solutions came out in the market filling just a small gap, but when you try to link everything together the BigData architecture become very complex and involves lot of different frameworks.
+There is 4 different element of a bigdata environment: * Storing the data * Processing the data * Showing the analysis * Governing the data
+In this short paper we will concentrate only on the second part, processing the data, more specifically processing batch data. There is lot of processing framework out there like Apache Spark, Apache Flink, Google DataFlow, Apache Pig&hellip; The solution most conventionally used, it&rsquo;s Apache Spark. I stated to use Spark since the version 1.5, today the last version is the 2.4.0. Lot of things have improved since back then. Before to run a spark cluster was not an easy task, either you have an Hadoop cluster and you run spark using Yarn as a scheduler." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.mark-thebault.pro/articles/2019/spark-k8s/" />
+<meta property="article:published_time" content="2019-03-30T11:20:37-04:00"/>
+<meta property="article:modified_time" content="2019-03-30T11:20:37-04:00"/><meta property="og:see_also" content="https://www.mark-thebault.pro/articles/2019/pii-data-checker/" />
+<meta property="og:see_also" content="https://www.mark-thebault.pro/articles/2018/kops-kubernetes-aws/" />
+
+
+
+  <title>
+  
+       Apache Spark, the new way! | Mark Thebault 
+  
+  </title>
+
+  <link rel="canonical" href="https://www.mark-thebault.pro/articles/2019/spark-k8s/">
+
+  
+  
+
+  
+  <link href="https://www.mark-thebault.pro/css/vendors-extensions/fontawesome/all.min.css" rel="stylesheet">
+
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Ubuntu+Mono:400,400i,700,700i|Raleway:300,400,500,600">
+  <link href="https://www.mark-thebault.pro/css/font.css" rel="stylesheet"> 
+    
+  
+  <link href="https://www.mark-thebault.pro/css/vendors/bootstrap4/bootstrap.min.css" rel="stylesheet">
+  <link href="https://www.mark-thebault.pro/css/vendors-extensions/mdb/mdb.min.css" rel="stylesheet"> 
+  <link href="https://www.mark-thebault.pro/css/vendors/mdb/style.min.css" rel="stylesheet"> 
+  <link href="https://www.mark-thebault.pro/css/main.css" rel="stylesheet">
+
+
+  
+  <link rel="shortcut icon"
+  
+      href="https://www.mark-thebault.pro/img/icon.png"
+  
+  >
+
+
+  
+  
+
+  <style type="text/css">
+      @media (min-width: 800px) and (max-width: 850px) {
+              .navbar:not(.top-nav-collapse) {
+                  background: #1C2331!important;
+              }
+          }
+  </style>
+
+
+  
+    
+    <link rel="stylesheet" href="https://www.mark-thebault.pro/js/vendors/katex/katex.min.css">
+  
+  
+
+  
+    
+    <link rel="stylesheet" href="https://www.mark-thebault.pro/css/vendors/highlight/github-gist.css">
+  
+
+</head>
+
+  <body class="bg-light" data-spy="scroll" data-target="#page-scrollspy" data-offset="90">
+  
+    
+    
+
+    
+      
+
+
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+    <div class="container">
+
+      
+      <a class="navbar-brand" href="https://www.mark-thebault.pro/">
+          
+        <img class="avatar" src="https://www.mark-thebault.pro/img/icon.png" style="width: 40px!important;height: auto;"  class="d-inline-block align-top" alt="" >
+        
+        <strong> Mark Thebault</strong>
+      </a>
+
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        
+        <ul class="navbar-nav mr-auto ">
+          <li class="nav-item ">
+            <a class="nav-link" href="https://www.mark-thebault.pro/">Home</a>
+          </li>
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://www.mark-thebault.pro/articles/" >Articles  </a>
+            </li>
+          
+             
+            <li class="nav-item ">
+              <a class="nav-link" href="https://www.mark-thebault.pro/about/" >About  </a>
+            </li>
+          
+          
+        </ul>
+
+      </div>
+
+    </div>
+  </nav>
+  
+ 
+      
+ 
+
+
+
+
+
+
+<div id="site-header" class="carousel slide carousel-fade" data-ride="carousel" style="height: 18rem;" >  
+
+  
+  
+  
+
+  
+  <div class="carousel-inner" role="listbox">
+    
+      
+
+        
+        <div class="carousel-item active">
+          <div class="view" style="background-image: url('https://www.mark-thebault.pro/img/header-slides/cloud-computing.jpg'); background-repeat: no-repeat; background-size: cover;">
+
+            
+            <div class="mask rgba-black-light d-flex justify-content-center align-items-center">
+
+              
+              
+              
+
+            </div>
+            
+
+          </div>
+        </div>
+        
+      
+    
+
+  
+  </div>
+  
+
+  
+  <div class="carousel-content text-center white-text wow fadeIn">
+    <div class="row mx-0 headfont mt-3 pt-4">
+      
+      <div class="col-12 col-sm-5 align-middle">
+        <a href="https://www.mark-thebault.pro/">
+          
+            <img class="pull-right avatar avatar-md" src="https://www.mark-thebault.pro/img/profile.jpg" alt="" >
+          
+        </a>
+      </div>
+      
+      <div class="col-12 col-sm-7 text-left pl-2">
+        <a href="https://www.mark-thebault.pro/">
+          <h1 class="mb-2 h1" style="font-weight: 300;" >
+            <strong>Mark Thebault</strong>
+          </h1>
+        </a>
+        
+
+             
+        <div class="mt-2" style="font-size: 1rem; color: white;">
+            
+              <a href="https://github.com/markthebault" target="_blank" rel="noopener"><i class="fab fa-github pr-1" aria-hidden="true"></i></a>    
+            
+            
+              <a href="https://www.linkedin.com/in/mark-thebault-a0464894/" target="_blank" rel="noopener"><i class="fab fa-linkedin pr-1" aria-hidden="true"></i></a>
+            
+
+            
+
+            
+
+            
+                <a href="https://twitter.com/markthbt" target="_blank" rel="noopener"><i class="fab fa-twitter pr-1" aria-hidden="true"></i></a>
+            
+
+            
+    
+            
+    
+        
+            
+                <a href="mailto:you@email.com"><i class="far fa-envelope-open pr-1" aria-hidden="true"></i></a>
+            
+    
+            
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  
+  
+
+</div>
+  
+    
+
+    
+  
+  <main class="post-main-wrapper">
+    
+    
+    <div class="row">
+
+      
+
+      
+      <div class="col-md-10">
+      
+
+        
+        <div class="z-depth-1  post-wrapper white-bg single-post">
+
+          <div class="post-header text-center" >
+  <ul class="post-meta li-x">
+    
+      
+        <li><a href="https://www.mark-thebault.pro/categories/bigdata"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> bigdata </a></li>
+      
+        <li><a href="https://www.mark-thebault.pro/categories/kubernetes"><i class="fas fa-folder-open pr-1" aria-hidden="true"></i> kubernetes </a></li>
+      
+    
+    
+      
+        <li><a href="https://www.mark-thebault.pro/series/bigdata"><i class="fas fa-bookmark pr-1" aria-hidden="true"></i>bigdata</a></li>
+      
+        <li><a href="https://www.mark-thebault.pro/series/kubernetes"><i class="fas fa-bookmark pr-1" aria-hidden="true"></i>kubernetes</a></li>
+      
+    
+  </ul>
+
+  <div class="px-4 post-heading">Apache Spark, the new way!</div>
+
+  <ul class="post-meta li-x mt-1">
+    
+      <li>Mar 30, 2019</li>
+    
+
+    
+      <li class="middot"></li>
+      <li>7 minutes read</li>
+    
+  </ul>
+  
+    <div class="view">
+      <img src="https://www.mark-thebault.pro/images/blog/spark-k8s.jpg" />
+    </div>
+  
+
+</div>
+
+
+          <div class="post-content markdown">
+            
+
+<h1 id="bigdata-analytics-on-kubernetes">BigData analytics on Kubernetes</h1>
+
+<p>Bigdata is a big topic since 2009, every company is seeking to process and extract information from the data that they stores.
+Making a complete environment from storing the data to presenting it in a simple way has been very challengin for the past years.
+Lot of solutions came out in the market filling just a small gap, but when you try to link everything together the BigData architecture
+become very complex and involves lot of different frameworks.</p>
+
+<p><strong>There is 4 different element of a bigdata environment:</strong>
+* Storing the data
+* Processing the data
+* Showing the analysis
+* Governing the data</p>
+
+<p>In this short paper we will concentrate only on the second part, processing the data, more specifically processing batch data.
+There is lot of processing framework out there like Apache Spark, Apache Flink, Google DataFlow, Apache Pig&hellip;
+The solution most conventionally used, it&rsquo;s Apache Spark. I stated to use Spark since the version 1.5, today the last version is the 2.4.0.
+Lot of things have improved since back then. Before to run a spark cluster was not an easy task, either you have an Hadoop cluster and you run spark using Yarn as a scheduler. You could also use Mesos for this purpose. But when you want to run only Spark for the time being, the deployment was complex.</p>
+
+<h2 id="spark-architecture">Spark Architecture</h2>
+
+<p>Apache Spark is a distributed horizontally scalable and fault tolerant computation framework. It is composed of several workers, a driver and a cluster manager (also called Spark Master).</p>
+
+<p>The Spark driver coordinates tasks that are executed by the Spark workers
+<img src="https://spark.apache.org/docs/latest/img/cluster-overview.png" alt="alt Apache Spark architecure" /></p>
+
+<p>The workers and the driver exchanges data between each other when needed. This exchange of data is done using random ports. This allows only spark cluster to be in the same network (probably in a unique subnet depending on your company policy)</p>
+
+<p>There is two different ways to run jobs on top of Spark, first way is to run them in the client mode and the second way is to run in cluster mode.</p>
+
+<p>In client mode, the driver will be run outside of the cluster, generally on the client that starts the job.</p>
+
+<p>In a cluster mode, the spark Driver will run on one Spark worker. All the workers will need to have all library accessible or installed.</p>
+
+<p>When you use a Data Science studio (commonly called a notebook) that uses a Spark Cluster, this notebook will hold the Spark Driver.</p>
+
+<h2 id="the-new-way-of-deploying-apache-spark">The new way of deploying Apache Spark</h2>
+
+<p>Docker Containers are more and more used in IT daylife, running Spark in containers was the obvious way to go since it helps the deployment. But it also added complexity. Spark itself it very good, but to make analytics to develop your algorithms you need a nice interface to interact with the data. Spark does not provide that, Jupyter does, but Jupyter is not natively integrated with Spark. Integrating them together using containers was though because Jupyter needed to run the Spark Driver.</p>
+
+<p>A solution came out, using <a href="https://livy.incubator.apache.org/">Apache Livy</a> Jupyter does not need anymore to run the Spark Driver since Livy runs it and Jupyter using spark magic talks to Livy using HTTP/HTTPS. This solution is great but you can not control Spark as you would like and it adds another framework to manage.</p>
+
+<p>Since the <a href="https://apache-spark-on-k8s.github.io/userdocs/running-on-kubernetes.html">Spark release v2.2.0</a> the developers did a fantastic Job, they work alongside with Kubernetes APIs to be able to start Spark in Containers. The Spark driver start and stops worker pods when needed. In cluster mode, the Spark driver gets its own driver. When the Spark Tasks are completed, the driver does not consume anymore resources.</p>
+
+<p><img src="https://spark.apache.org/docs/2.3.0/img/k8s-cluster-mode.png" alt="Spark K8s Architecture" /></p>
+
+<h2 id="how-to-deploy-spark-and-jupyter-in-kubernetes">How to deploy Spark and Jupyter in kubernetes</h2>
+
+<p>Well, the first thing you need it&rsquo;s a kubernetes cluster right? In the following examples we will be using AWS EKS (AWS Managed Kubernetes cluster). You also can run it directly on <a href="https://kubernetes.io/docs/setup/minikube/">minikue</a> but we will not be explaining this here.</p>
+
+<h3 id="cluster-creation">Cluster creation</h3>
+
+<p>To create the EKS cluster, we will using <a href="https://www.terraform.io/">Terraform</a> to provision an AWS VPC with 3 public subnets to hold our Kubernetes Minions.</p>
+
+<p><strong>To create the VPC we will use a terraform module:</strong></p>
+
+<pre><code class="language-javascript">module &quot;vpc&quot; {
+  source = &quot;terraform-aws-modules/vpc/aws&quot;
+
+  name = &quot;vpc-k8s-cluster&quot;
+
+  cidr = &quot;10.11.0.0/16&quot;
+
+  azs             = [&quot;eu-west-1a&quot;, &quot;eu-west-1b&quot;, &quot;eu-west-1c&quot;]
+  private_subnets = [&quot;10.11.1.0/24&quot;, &quot;10.11.2.0/24&quot;, &quot;10.11.3.0/24&quot;]
+
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+  default_vpc_enable_dns_hostnames = true
+
+
+  tags = {
+    Owner       = &quot;Chuck Norris&quot;
+    Environment = &quot;test&quot;
+  }
+
+  vpc_tags = {
+    Name = &quot;vpc-k8s-cluster&quot;
+  }
+}
+</code></pre>
+
+<p><strong>We create the repositories for our Jupyter and Spark worker images:</strong></p>
+
+<pre><code class="language-javascript">resource &quot;aws_ecr_repository&quot; &quot;spark_img&quot; {
+  name = &quot;spark&quot;
+}
+resource &quot;aws_ecr_repository&quot; &quot;jupyter_img&quot; {
+  name = &quot;jupyter&quot;
+}
+</code></pre>
+
+<p><strong>Then we create the EKS cluster:</strong></p>
+
+<pre><code class="language-javascript">module &quot;my-cluster&quot; {
+  source       = &quot;terraform-aws-modules/eks/aws&quot;
+  cluster_name = &quot;my-cluster&quot;
+  subnets      = &quot;${module.vpc.public_subnets}&quot;
+  vpc_id       = &quot;${module.vpc.vpc_id}&quot;
+
+  worker_groups = [
+    {
+      instance_type = &quot;m5.large&quot;
+      asg_max_size  = 5
+      worker_group_count = &quot;2&quot;
+    }
+  ]
+
+  tags = {
+    environment = &quot;test&quot;
+  }
+}
+</code></pre>
+
+<h3 id="deploy-jupyter-in-kubernetes">Deploy Jupyter in Kubernetes</h3>
+
+<p>Jupyter will create and delete containers inside kubernetes, if you have <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">RBAC</a> enabled, you need to create a Role that will be used by Jupyter to handle resources inside Kubernetes.</p>
+
+<pre><code class="language-yaml">kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+ namespace: default
+ name: jupyter-role
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;pods&quot;]
+  verbs: [&quot;get&quot;, &quot;watch&quot;, &quot;list&quot;, &quot;edit&quot;, &quot;create&quot;, &quot;delete&quot;]
+</code></pre>
+
+<p>Then you need to link the role to a ServiceAccount that can be used by the Jupyter pods:</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jupyter-sa
+---
+apiVersion: v1
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: jupyter-role-binding
+roleRef:
+  kind: Role
+  name: jupyter-role
+  apiGroup: &quot;&quot;
+subjects:
+- kind: ServiceAccount
+  name: jupyter-sa
+  namespace: default
+</code></pre>
+
+<p>And then create a deployment for jupyter:</p>
+
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter
+spec:
+  selector:
+    matchLabels:
+      app: jupyter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jupyter
+    spec:
+      serviceAccountName: jupyter-sa
+      containers:
+      - name: server
+        image: &quot;REPLACE_THIS_BY_YOUR_JUPYTER_IMAGE_URI&quot;
+        ports:
+        - name: jupyter-port
+          containerPort: 8888
+</code></pre>
+
+<p>Expose the jupyter as a Kubernetes service, you could deploy this service with the type load balancer but we will use kubernetes port-forward capabilities to log to the container later on.</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: jupyter
+  labels:
+    app: jupyter
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: jupyter-port
+  selector:
+    app: jupyter
+</code></pre>
+
+<h2 id="log-to-jupyter">Log to Jupyter</h2>
+
+<p>Now our Jupyter notebook should be running in kubernetes, to log to the notebook, we need to access it via HTTP. To simplify this paper we will be using Kubernetes port-forward to expose the container port to our localhost.</p>
+
+<pre><code class="language-bash">kubectl --kubeconfig=kubeconfig_my-cluster port-forward deployment/jupyter 8888:8888
+</code></pre>
+
+<p>Now Jupyter is asking for a token, this token can be found in the logs of the container:</p>
+
+<pre><code class="language-bash">kubectl --kubeconfig=kubeconfig_my-cluster logs deployment/jupyter | grep token
+</code></pre>
+
+<h2 id="create-some-interesting-computation-other-spark">Create some interesting computation other spark</h2>
+
+<p>For the purpose of this paper, we will calculate Pi number. Create a new notebook and insert the following code</p>
+
+<pre><code class="language-python">from __future__ import print_function
+
+import sys
+from random import random
+from operator import add
+import os
+import socket
+from pyspark.sql import SparkSession
+
+k8s_master='k8s://https://'+os.environ['KUBERNETES_SERVICE_HOST']+':'+os.environ['KUBERNETES_PORT_443_TCP_PORT']
+spark_worker_image=&quot;&lt;your docker image here&gt;&quot; #todo
+
+os.environ['PYSPARK_PYTHON'] = 'python3'
+os.environ['PYSPARK_DRIVER_PYTHON'] = 'python3'
+
+spark = SparkSession.builder.config(&quot;spark.app.name&quot;, &quot;spark-pi&quot;)\
+      .master(k8s_master)\
+      .config('spark.submit.deployMode', 'client')\
+      .config(&quot;spark.executor.instances&quot;, &quot;2&quot;)\
+      .config('spark.driver.host', socket.gethostbyname(socket.gethostname()))\
+      .config(&quot;spark.kubernetes.container.image&quot;, spark_worker_image)\
+      .getOrCreate()
+</code></pre>
+
+<p>In the code above, we get the kubernetes api via the environment variables that are set by kubernetes to the pod (<code>KUBERNETES_SERVICE_HOST</code> and <code>KUBERNETES_PORT_443_TCP_PORT</code>)</p>
+
+<p>After that we specify the version of python we want to use, by default python2.7 is used by Spark.</p>
+
+<p>the third command indicates the Spark Session by specifying the Spark Master handled by Kubernetes and some spark parameter.
+One important value is the <code>spark.driver.host</code> this variable is set to indicate to the spark workers to communicate to the driver on the IP of the jupyter container.</p>
+
+<p>The Spark Worker should have startd and be running, you can verificate using the command:</p>
+
+<pre><code class="language-bash">kubectl --kubeconfig=kubeconfig_my-cluster get po
+</code></pre>
+
+<p>Lastly just run the calculation of Pi:</p>
+
+<pre><code class="language-python">def f(_):
+    x = random() * 2 - 1
+    y = random() * 2 - 1
+    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0
+
+partitions = 2 # we have 2 workers so we use 2 partitions
+n = 100000 * partitions
+
+count = spark.sparkContext.parallelize(range(1, n + 1), partitions).map(f).reduce(add)
+print(&quot;Pi is roughly %f&quot; % (4.0 * count / n))
+</code></pre>
+
+<p>And then end the spark session:</p>
+
+<pre><code class="language-python">spark.stop()
+</code></pre>
+
+<h2 id="clone-me">Clone me</h2>
+
+<pre><code>git clone https://github.com/markthebault/jupyter-and-spark-on-eks.git
+</code></pre>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>Create a terraform template that generates the jupyter.yaml with the correct ECR uri of jupyter</li>
+<li>Pass the container image for spark in the env environment of the jupyter container #awesome</li>
+</ul>
+
+          </div>
+
+          
+          <div class="row">
+            <div class="col-md-8">
+            
+              <div class="mb-5">
+                
+<div class="li-x div-x post-meta">
+  <li class="pr-0"><a href="https://www.mark-thebault.pro/tags/"><i class="fas fa-tags"></i></a></li>
+  <div class="tags-sm">
+    
+      <li><a href="https://www.mark-thebault.pro/tags/bigdata" role="button">bigdata </a></li>
+      
+    
+      <li><a href="https://www.mark-thebault.pro/tags/spark" role="button">spark </a></li>
+      
+    
+      <li><a href="https://www.mark-thebault.pro/tags/jupyter" role="button">jupyter </a></li>
+      
+    
+      <li><a href="https://www.mark-thebault.pro/tags/kubernetes" role="button">kubernetes </a></li>
+      
+    
+      <li><a href="https://www.mark-thebault.pro/tags/bigdata" role="button">bigdata </a></li>
+      
+    
+  </div>
+</div>
+              </div>
+            
+            </div>
+            
+          </div>
+          
+
+          
+          <div class="row pt-3">
+            <div class="col-md-6">
+              
+                <a href=https://www.mark-thebault.pro/articles/2018/docker-swarm/ class="post-meta">Previous
+                  <div class="pt-2 pb-5 d-flex">
+                    <i class="fas fa-angle-left text-grey font-weight-bold mr-2 active-color"></i>
+                    <span>Running Docker Swarm in AWS</span>
+                  </div>
+                </a>
+              
+            </div>
+            
+            <div class="col-md-6 text-right" >
+              
+            </div>
+          </div>
+
+          
+
+        </div>
+        
+
+      </div>
+      
+
+      
+	
+	
+	
+	
+		
+		
+		
+	
+
+		
+		<div class="col-md-2 pl-0">
+
+			
+			<div id="page-scrollspy" class="toc-nav">
+				
+				<ul class="nav nav-pills ml-0">
+					
+					<li class="nav-item pb-3 text-center">
+						<span class="font-weight-bold mb-2">- CATALOG - </span>
+					</li>
+
+					
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#bigdata-analytics-on-kubernetes">
+												 BigData analytics on Kubernetes
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#spark-architecture">
+												 Spark Architecture
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#the-new-way-of-deploying-apache-spark">
+												 The new way of deploying Apache Spark
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#how-to-deploy-spark-and-jupyter-in-kubernetes">
+												 How to deploy Spark and Jupyter in kubernetes
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#cluster-creation">
+												 Cluster creation
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#deploy-jupyter-in-kubernetes">
+												 Deploy Jupyter in Kubernetes
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#log-to-jupyter">
+												 Log to Jupyter
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#create-some-interesting-computation-other-spark">
+												 Create some interesting computation other spark
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#clone-me">
+												 Clone me
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+									</ul>
+								
+							
+						
+				 
+						
+						
+							
+								
+								
+									<ul class="nav">
+								
+								
+
+										<li class="nav-item">
+						 					<a class="nav-link" href="#todo">
+												 TODO
+											</a>
+										</li>
+						 
+								
+								
+									</ul>
+								
+							
+						
+				 
+
+				</ul>
+			</div>
+			
+
+		</div>
+		
+	
+
+    </div>
+    
+
+
+  </main>
+  
+
+
+    
+    
+<footer class="page-footer text-center font-small mt-4 wow fadeIn">
+
+
+  
+  <div class="pb-2 mt-5 pt-5">
+    
+    <a href="https://github.com/markthebault " target="_blank" rel="noopener"><i class="fab fa-github mr-3"
+        aria-hidden="true"></i></a>
+    
+    
+    <a href="https://www.linkedin.com/in/mark-thebault-a0464894/" target="_blank" rel="noopener"><i class="fab fa-linkedin-in mr-3"
+        aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+    
+    <a href="https://twitter.com/markthbt" target="_blank" rel="noopener"><i class="fab fa-twitter mr-3"
+        aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+
+    
+    <a href="mailto:you@email.com"><i class="far fa-envelope-open mr-3" aria-hidden="true"></i></a>
+    
+
+    
+
+    
+
+  </div>
+  
+
+  
+  <div class="copyright py-4">
+    
+    <span> 2018 - 2019 &copy; | Mark Thebault </span>
+  </div>
+  
+
+</footer>
+
+    
+
+
+
+
+
+
+<script type="text/javascript" src="https://www.mark-thebault.pro/js/vendors/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://www.mark-thebault.pro/js/vendors/jquery/jquery.smooth-scroll.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://www.mark-thebault.pro/js/vendors/popper.min.js"></script>
+<script type="text/javascript" src="https://www.mark-thebault.pro/js/vendors/holder.min.js"></script>
+<script type="text/javascript" src="https://www.mark-thebault.pro/js/vendors-extensions/bootstrap4/bootstrap.js" ></script>
+
+<script type="text/javascript" src="https://www.mark-thebault.pro/js/vendors/mdb/mdb.min.js"></script>
+
+<script type="text/javascript" src="https://www.mark-thebault.pro/js/main.js"></script>
+
+
+
+  
+  <script src="https://www.mark-thebault.pro/js/vendors/highlight.pack.js"> </script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+ 
+  <script src="https://www.mark-thebault.pro/js/vendors/katex/katex.min.js"> </script>
+  <script src="https://www.mark-thebault.pro/js/vendors/katex/contrib/auto-render.min.js"></script>
+
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          renderMathInElement(document.body);
+      });
+  </script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  
+  new WOW().init();
+</script>
+
+
+
+
+  </body>
+</html>
