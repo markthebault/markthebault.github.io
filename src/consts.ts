@@ -17,9 +17,9 @@ export const SITE = {
 
 export const SOCIALS = [
   { label: 'GitHub', href: 'https://github.com/markthebault', handle: 'markthebault' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/markthebault/', handle: 'markthebault' },
-  { label: 'X', href: 'https://x.com/markthebault', handle: '@markthebault' },
-  { label: 'Email', href: 'mailto:hello@mark-thebault.pro', handle: 'hello@mark-thebault.pro' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mark-thebault', handle: 'mark-thebault' },
+  { label: 'X', href: 'https://x.com/MarkThebault', handle: '@MarkThebault' },
+  { label: 'Email', href: 'mailto:markthebaultpro@gmail.com', handle: 'markthebaultpro@gmail.com' },
 ] as const;
 
 export const NAV = [
