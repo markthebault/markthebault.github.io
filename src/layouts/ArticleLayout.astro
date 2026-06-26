@@ -1,0 +1,124 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  minutes?: number;
+}
+
+const { title, description, pubDate, updatedDate, tags = [], minutes } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} type="article">
+  <article class="wrap article">
+    <a href="/articles/" class="back mono">← All writing</a>
+
+    <header class="art-head">
+      <div class="art-meta mono">
+        <FormattedDate date={pubDate} />
+        {minutes && <span class="dot">·</span>}
+        {minutes && <span>{minutes} min read</span>}
+      </div>
+      <h1 class="art-title">{title}</h1>
+      <p class="art-desc">{description}</p>
+      {
+        tags.length > 0 && (
+          <ul class="art-tags">
+            {tags.map((t) => (
+              <li class="mono">{t}</li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        updatedDate && (
+          <p class="updated mono">
+            Updated <FormattedDate date={updatedDate} />
+          </p>
+        )
+      }
+    </header>
+
+    <hr class="rule art-rule" />
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    <footer class="art-foot">
+      <hr class="rule" />
+      <a href="/articles/" class="back mono">← Back to all writing</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .article {
+    padding-top: 2.5rem;
+    max-width: 50rem;
+  }
+  .back {
+    color: var(--taupe);
+    font-size: 0.78rem;
+    display: inline-block;
+  }
+  .back:hover {
+    color: var(--blueprint);
+  }
+  .art-head {
+    margin-top: 2.5rem;
+  }
+  .art-meta {
+    color: var(--taupe);
+    font-size: 0.74rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .art-title {
+    font-size: var(--step-3);
+    margin-top: 1rem;
+    max-width: 22ch;
+  }
+  .art-desc {
+    margin-top: 1.2rem;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    font-family: var(--font-display);
+    font-style: italic;
+    max-width: 52ch;
+  }
+  .art-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.4rem;
+  }
+  .art-tags li {
+    font-size: 0.68rem;
+    color: var(--taupe);
+    border: 1px solid var(--hairline);
+    padding: 0.15rem 0.55rem;
+    letter-spacing: 0.04em;
+  }
+  .updated {
+    margin-top: 1rem;
+    color: var(--taupe);
+    font-size: 0.72rem;
+  }
+  .art-rule {
+    margin-block: 2.5rem;
+  }
+  .art-foot {
+    margin-top: 4rem;
+  }
+  .art-foot .back {
+    margin-top: 2rem;
+  }
+</style>

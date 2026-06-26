@@ -1,0 +1,160 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const work = (await getCollection('work')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+
+<BaseLayout
+  title="Work"
+  description="Selected projects and systems — agentic AI platforms, developer experience, and cloud-native architecture."
+>
+  <section class="wrap page-head">
+    <p class="eyebrow">Selected work</p>
+    <h1 class="page-title">Systems built to last past the demo.</h1>
+    <p class="page-lede">
+      A selection of platforms, architectures, and agentic systems I’ve led —
+      the kind of work where the hard part isn’t the prototype, it’s
+      everything after it.
+    </p>
+  </section>
+
+  <section class="wrap">
+    <ol class="work-list">
+      {
+        work.map((w, i) => (
+          <li class="work-item">
+            <span class="w-index mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div class="w-main">
+              <div class="w-top">
+                <h2 class="w-title">{w.data.title}</h2>
+                <span class="w-year mono">{w.data.year}</span>
+              </div>
+              <p class="w-role mono">{w.data.role}</p>
+              <p class="w-summary">{w.data.summary}</p>
+              {w.data.stack.length > 0 && (
+                <ul class="w-stack">
+                  {w.data.stack.map((s) => (
+                    <li class="mono">{s}</li>
+                  ))}
+                </ul>
+              )}
+              {w.data.link && (
+                <a href={w.data.link} target="_blank" rel="noopener" class="w-link mono">
+                  Visit ↗
+                </a>
+              )}
+            </div>
+          </li>
+        ))
+      }
+      {
+        work.length === 0 && (
+          <p class="empty">Case studies are being written up. Check back shortly.</p>
+        )
+      }
+    </ol>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-top: clamp(2.5rem, 6vh, 4.5rem);
+    padding-bottom: 2.5rem;
+  }
+  .page-title {
+    font-size: var(--step-3);
+    margin-top: 1.2rem;
+    max-width: 18ch;
+  }
+  .page-lede {
+    margin-top: 1.4rem;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    max-width: 50ch;
+  }
+  .work-list {
+    list-style: none;
+  }
+  .work-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .w-index {
+    color: var(--blueprint);
+    font-size: 0.8rem;
+    padding-top: 0.6rem;
+  }
+  .w-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .w-title {
+    font-size: var(--step-2);
+    font-weight: 460;
+  }
+  .w-year {
+    color: var(--taupe);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  .w-role {
+    color: var(--blueprint);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+  .w-summary {
+    margin-top: 0.9rem;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .w-stack {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+  .w-stack li {
+    font-size: 0.68rem;
+    color: var(--taupe);
+    border: 1px solid var(--hairline);
+    padding: 0.15rem 0.55rem;
+  }
+  .w-link {
+    display: inline-block;
+    margin-top: 1.1rem;
+    color: var(--ink);
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--blueprint);
+    padding-bottom: 0.1rem;
+  }
+  .w-link:hover {
+    color: var(--blueprint);
+  }
+  .empty {
+    padding-block: 3rem;
+    color: var(--taupe);
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+  }
+  @media (max-width: 38rem) {
+    .work-item {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+    .w-index {
+      display: none;
+    }
+  }
+</style>
