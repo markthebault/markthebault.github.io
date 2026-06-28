@@ -1,0 +1,289 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { SITE, SOCIALS } from '../consts';
+import readingTime from 'reading-time';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const latest = articles.slice(0, 4);
+
+// reading time per article (rendered body word count)
+function minutesFor(body: string | undefined) {
+  if (!body) return undefined;
+  return Math.max(1, Math.round(readingTime(body).minutes));
+}
+---
+
+<BaseLayout>
+  <!-- ============ HERO: the title block ============ -->
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div class="hero-statement">
+        <p class="eyebrow">Principal Architect</p>
+        <h1 class="hero-title">
+          Bridging <span class="mark">Agentic AI</span> and
+          <span class="mark">platform engineering</span> at scale.
+        </h1>
+        <p class="hero-lede">
+          I’m {SITE.name} — I help engineering teams turn promising AI
+          prototypes into production systems: the orchestration, the
+          guardrails, and the platform underneath that make agents
+          dependable rather than demo-ware.
+        </p>
+        <div class="hero-cta">
+          <a href="/articles/" class="btn btn-primary">Read the writing</a>
+          <a href="/work/" class="btn btn-ghost">See the work</a>
+        </div>
+      </div>
+
+      <!-- Architectural title block -->
+      <aside class="title-block" aria-label="Profile summary">
+        <div class="tb-row tb-head">
+          <span>DRAWING</span>
+          <span>{SITE.drawingNo}</span>
+        </div>
+        <dl class="tb-fields">
+          <div><dt>Role</dt><dd>{SITE.role}</dd></div>
+          <div><dt>Focus</dt><dd>Agentic AI · Platform Eng</dd></div>
+          <div><dt>Scale</dt><dd>Production systems</dd></div>
+          <div><dt>Based</dt><dd>{SITE.location}</dd></div>
+        </dl>
+        <div class="tb-row tb-foot">
+          <span>REV</span>
+          <span>2025.06 — A</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ DISCIPLINES strip ============ -->
+  <section class="wrap disciplines">
+    <ul>
+      <li><span class="mono d-no">01</span><span>Agentic systems &amp; orchestration</span></li>
+      <li><span class="mono d-no">02</span><span>Platform &amp; developer experience</span></li>
+      <li><span class="mono d-no">03</span><span>LLM infrastructure &amp; evaluation</span></li>
+      <li><span class="mono d-no">04</span><span>Cloud-native architecture</span></li>
+    </ul>
+  </section>
+
+  <!-- ============ LATEST WRITING ============ -->
+  <section class="wrap latest">
+    <header class="sec-head">
+      <p class="eyebrow">Latest writing</p>
+      <a href="/articles/" class="sec-link mono">All articles →</a>
+    </header>
+    <div class="feed">
+      {
+        latest.map((a, i) => (
+          <ArticleCard
+            href={`/articles/${a.id.replace(/^\d{4}-\d{2}-\d{2}_/, '')}/`}
+            title={a.data.title}
+            description={a.data.description}
+            pubDate={a.data.pubDate}
+            tags={a.data.tags}
+            index={i}
+            minutes={minutesFor(a.body)}
+          />
+        ))
+      }
+      {
+        latest.length === 0 && (
+          <p class="empty">First articles are on the drawing board. Check back shortly.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    padding-top: clamp(2.5rem, 6vh, 4.5rem);
+    padding-bottom: clamp(2.5rem, 5vh, 4rem);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 56rem) {
+    .hero-grid {
+      grid-template-columns: 1.65fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 1.8rem + 3.2vw, 4.8rem);
+    line-height: 1.0;
+    margin-top: 1.4rem;
+    max-width: 16ch;
+    animation: rise 0.8s var(--ease) both;
+  }
+  .hero-title .mark {
+    font-style: italic;
+    color: var(--blueprint);
+  }
+  .hero-lede {
+    margin-top: 1.8rem;
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 46ch;
+    animation: rise 0.8s var(--ease) 0.1s both;
+  }
+  .hero-cta {
+    margin-top: 2.2rem;
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    animation: rise 0.8s var(--ease) 0.2s both;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.3rem;
+    font-size: 0.92rem;
+    font-weight: 500;
+    border: 1px solid var(--ink);
+    transition: all 0.25s var(--ease);
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn-primary:hover {
+    background: var(--blueprint);
+    border-color: var(--blueprint);
+    color: var(--paper);
+  }
+  .btn-ghost {
+    border-color: var(--hairline-strong);
+    color: var(--ink);
+  }
+  .btn-ghost:hover {
+    border-color: var(--blueprint);
+    color: var(--blueprint);
+  }
+
+  /* ---- Title block ---- */
+  .title-block {
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 6px 6px 0 var(--hairline);
+    animation: rise 0.8s var(--ease) 0.15s both;
+  }
+  .tb-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    padding: 0.6rem 0.9rem;
+    color: var(--paper);
+    background: var(--ink);
+  }
+  .tb-foot {
+    background: none;
+    color: var(--taupe);
+    border-top: 1px solid var(--hairline);
+  }
+  .tb-fields {
+    display: grid;
+  }
+  .tb-fields > div {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .tb-fields dt {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    padding: 0.75rem 0.9rem;
+    border-right: 1px solid var(--hairline);
+  }
+  .tb-fields dd {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.86rem;
+    color: var(--ink);
+  }
+
+  /* ---- Disciplines ---- */
+  .disciplines {
+    padding-block: 1rem 3.5rem;
+  }
+  .disciplines ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid var(--hairline);
+    border-left: 1px solid var(--hairline);
+  }
+  @media (min-width: 56rem) {
+    .disciplines ul {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .disciplines li {
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    padding: 1.3rem 1.1rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    min-height: 7rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    transition: background 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .disciplines li:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .d-no {
+    color: var(--blueprint);
+    font-size: 0.72rem;
+  }
+  .disciplines li:hover .d-no {
+    color: var(--paper);
+  }
+
+  /* ---- Sections ---- */
+  .sec-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .sec-link {
+    color: var(--taupe);
+    font-size: 0.78rem;
+  }
+  .sec-link:hover {
+    color: var(--blueprint);
+  }
+  .empty {
+    padding-block: 3rem;
+    color: var(--taupe);
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.8rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

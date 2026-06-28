@@ -1,0 +1,124 @@
+---
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags?: string[];
+  index?: number; // drawing-style row number
+  minutes?: number;
+}
+
+const { href, title, description, pubDate, tags = [], index, minutes } = Astro.props;
+const num = index !== undefined ? String(index + 1).padStart(2, '0') : undefined;
+---
+
+<article class="card">
+  <a href={href} class="card-link">
+    {num && <span class="card-num mono" aria-hidden="true">{num}</span>}
+    <div class="card-body">
+      <div class="card-meta mono">
+        <FormattedDate date={pubDate} />
+        {minutes && <span class="dot">·</span>}
+        {minutes && <span>{minutes} min</span>}
+      </div>
+      <h3 class="card-title">{title}</h3>
+      <p class="card-desc">{description}</p>
+      {
+        tags.length > 0 && (
+          <ul class="card-tags">
+            {tags.map((t) => (
+              <li class="mono">{t}</li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+    <span class="card-arrow" aria-hidden="true">→</span>
+  </a>
+</article>
+
+<style>
+  .card {
+    border-top: 1px solid var(--hairline);
+  }
+  .card-link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: start;
+    padding-block: 2rem;
+    color: var(--ink);
+    transition: background 0.3s var(--ease);
+  }
+  .card-link:hover {
+    background: var(--blueprint-wash);
+  }
+  .card-num {
+    color: var(--taupe);
+    font-size: 0.78rem;
+    padding-top: 0.45rem;
+  }
+  .card-link:hover .card-num {
+    color: var(--blueprint);
+  }
+  .card-meta {
+    color: var(--taupe);
+    font-size: 0.72rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+  .card-title {
+    font-size: var(--step-2);
+    font-weight: 460;
+    line-height: 1.08;
+    transition: color 0.2s var(--ease);
+  }
+  .card-link:hover .card-title {
+    color: var(--blueprint-deep);
+  }
+  .card-desc {
+    margin-top: 0.6rem;
+    color: var(--ink-soft);
+    max-width: 52ch;
+  }
+  .card-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .card-tags li {
+    font-size: 0.68rem;
+    color: var(--taupe);
+    border: 1px solid var(--hairline);
+    padding: 0.15rem 0.55rem;
+    letter-spacing: 0.04em;
+  }
+  .card-arrow {
+    font-size: 1.2rem;
+    color: var(--hairline-strong);
+    padding-top: 0.4rem;
+    transition: transform 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .card-link:hover .card-arrow {
+    color: var(--blueprint);
+    transform: translate(0.3rem, 0);
+  }
+  @media (max-width: 38rem) {
+    .card-link {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding-block: 1.6rem;
+    }
+    .card-num,
+    .card-arrow {
+      display: none;
+    }
+  }
+</style>

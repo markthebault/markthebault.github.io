@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE, SOCIALS } from '../consts';
+
+const principles = [
+  {
+    no: '01',
+    title: 'The platform is the product',
+    body: 'Agents are only as reliable as the system beneath them. I design the orchestration, evaluation, and guardrails as first-class infrastructure — not afterthoughts bolted onto a prototype.',
+  },
+  {
+    no: '02',
+    title: 'Production is the real benchmark',
+    body: 'A demo proves something is possible. Latency budgets, failure modes, cost ceilings, and on-call pages prove it’s real. I optimise for the second list.',
+  },
+  {
+    no: '03',
+    title: 'Leverage teams, not just code',
+    body: 'The highest-leverage architecture work is the kind that makes a whole team faster: paved roads, sharp abstractions, and decisions that age well.',
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="Mark Thebault — principal architect working across Agentic AI and platform engineering."
+>
+  <section class="wrap about-hero">
+    <div class="ah-grid">
+      <div>
+        <p class="eyebrow">About</p>
+        <h1 class="ah-title">
+          I build the platforms that make AI dependable.
+        </h1>
+        <div class="ah-body">
+          <p>
+            I’m {SITE.name}, a principal architect working across Agentic AI
+            and platform engineering. For most of my career I’ve sat where
+            ambitious ideas meet the realities of running software at scale —
+            translating what a team wants to build into systems that hold up
+            when real users and real traffic arrive.
+          </p>
+          <p>
+            Lately that means agentic AI: orchestration, tool use, evaluation
+            harnesses, and the infrastructure that lets teams ship agents they
+            can actually trust. I care about the unglamorous parts — observability,
+            cost, failure modes, developer experience — because that’s where
+            the difference between a demo and a product lives.
+          </p>
+          <p>
+            This site is where I think out loud: essays, field notes, and the
+            occasional opinion, mostly aimed at the engineers and architects
+            doing this work alongside me.
+          </p>
+        </div>
+      </div>
+
+      <aside class="ah-card">
+        <div class="ahc-head mono">PROFILE</div>
+        <dl>
+          <div><dt>Role</dt><dd>{SITE.role}</dd></div>
+          <div><dt>Working on</dt><dd>Agentic AI platforms</dd></div>
+          <div><dt>Based</dt><dd>{SITE.location}</dd></div>
+        </dl>
+        <div class="ahc-head mono ahc-links-head">ELSEWHERE</div>
+        <ul class="ahc-links">
+          {
+            SOCIALS.map((s) => (
+              <li>
+                <a href={s.href} target={s.label === 'Email' ? undefined : '_blank'} rel="me noopener">
+                  <span>{s.label}</span>
+                  <span class="mono">↗</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="wrap principles">
+    <p class="eyebrow">How I work</p>
+    <ul class="p-list">
+      {
+        principles.map((p) => (
+          <li class="p-item">
+            <span class="p-no mono">{p.no}</span>
+            <h2 class="p-title">{p.title}</h2>
+            <p class="p-body">{p.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-hero {
+    padding-top: clamp(2.5rem, 6vh, 4.5rem);
+  }
+  .ah-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 56rem) {
+    .ah-grid {
+      grid-template-columns: 1.7fr 1fr;
+      gap: 4rem;
+    }
+  }
+  .ah-title {
+    font-size: var(--step-3);
+    margin-top: 1.2rem;
+    max-width: 16ch;
+  }
+  .ah-body {
+    margin-top: 2rem;
+  }
+  .ah-body > p + p {
+    margin-top: 1.2rem;
+  }
+  .ah-body p {
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+
+  .ah-card {
+    border: 1px solid var(--ink);
+    align-self: start;
+    background: var(--paper);
+    box-shadow: 6px 6px 0 var(--hairline);
+  }
+  .ahc-head {
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    padding: 0.6rem 0.9rem;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .ahc-links-head {
+    background: var(--paper-deep);
+    color: var(--taupe);
+    border-top: 1px solid var(--hairline);
+  }
+  .ah-card dl > div {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .ah-card dt {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    padding: 0.7rem 0.9rem;
+    border-right: 1px solid var(--hairline);
+  }
+  .ah-card dd {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.85rem;
+  }
+  .ahc-links {
+    list-style: none;
+  }
+  .ahc-links li {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .ahc-links li:last-child {
+    border-bottom: 0;
+  }
+  .ahc-links a {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .ahc-links a:hover {
+    color: var(--blueprint);
+    background: var(--blueprint-wash);
+  }
+
+  /* principles */
+  .principles {
+    padding-top: 5rem;
+  }
+  .p-list {
+    list-style: none;
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 52rem) {
+    .p-list {
+      grid-template-columns: repeat(3, 1fr);
+      border-left: 1px solid var(--hairline);
+    }
+  }
+  .p-item {
+    border-top: 1px solid var(--hairline);
+    padding: 1.8rem 1.4rem 2.2rem;
+  }
+  @media (min-width: 52rem) {
+    .p-item {
+      border-right: 1px solid var(--hairline);
+      border-top: 1px solid var(--hairline);
+    }
+  }
+  .p-no {
+    color: var(--blueprint);
+    font-size: 0.78rem;
+  }
+  .p-title {
+    font-size: var(--step-1);
+    margin-top: 0.9rem;
+    line-height: 1.15;
+  }
+  .p-body {
+    margin-top: 0.9rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+</style>

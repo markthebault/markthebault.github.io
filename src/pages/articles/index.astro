@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import readingTime from 'reading-time';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const minutesFor = (body?: string) =>
+  body ? Math.max(1, Math.round(readingTime(body).minutes)) : undefined;
+---
+
+<BaseLayout
+  title="Writing"
+  description="Essays and field notes on Agentic AI, platform engineering, and building production-grade AI systems."
+>
+  <section class="wrap page-head">
+    <p class="eyebrow">Writing</p>
+    <h1 class="page-title">Field notes from the intersection of AI and platform.</h1>
+    <p class="page-lede">
+      Essays on agentic systems, the platforms that hold them up, and what
+      actually survives contact with production.
+    </p>
+  </section>
+
+  <section class="wrap">
+    <div class="feed">
+      {
+        articles.map((a, i) => (
+          <ArticleCard
+            href={`/articles/${a.id.replace(/^\d{4}-\d{2}-\d{2}_/, '')}/`}
+            title={a.data.title}
+            description={a.data.description}
+            pubDate={a.data.pubDate}
+            tags={a.data.tags}
+            index={i}
+            minutes={minutesFor(a.body)}
+          />
+        ))
+      }
+      {
+        articles.length === 0 && (
+          <p class="empty">First articles are on the drawing board. Check back shortly.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding-top: clamp(2.5rem, 6vh, 4.5rem);
+    padding-bottom: 2.5rem;
+  }
+  .page-title {
+    font-size: var(--step-3);
+    margin-top: 1.2rem;
+    max-width: 18ch;
+  }
+  .page-lede {
+    margin-top: 1.4rem;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    max-width: 48ch;
+  }
+  .empty {
+    padding-block: 3rem;
+    color: var(--taupe);
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+  }
+</style>

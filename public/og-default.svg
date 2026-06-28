@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f3ec"/>
+  <!-- faint drafting grid -->
+  <g stroke="#ddd7c8" stroke-width="1" opacity="0.6">
+    <line x1="60" y1="0" x2="60" y2="630"/>
+    <line x1="0" y1="60" x2="1200" y2="60"/>
+    <line x1="0" y1="570" x2="1200" y2="570"/>
+    <line x1="1140" y1="0" x2="1140" y2="630"/>
+  </g>
+  <!-- eyebrow -->
+  <line x1="80" y1="150" x2="116" y2="150" stroke="#2160a6" stroke-width="2"/>
+  <text x="128" y="156" font-family="'IBM Plex Mono', monospace" font-size="22"
+        letter-spacing="6" fill="#2160a6">PRINCIPAL ARCHITECT</text>
+  <!-- headline -->
+  <text x="78" y="280" font-family="Georgia, 'Fraunces', serif" font-size="76" fill="#142440">Bridging <tspan font-style="italic" fill="#2160a6">Agentic AI</tspan></text>
+  <text x="78" y="372" font-family="Georgia, 'Fraunces', serif" font-size="76" fill="#142440">and <tspan font-style="italic" fill="#2160a6">platform engineering</tspan>.</text>
+  <!-- name / title block -->
+  <text x="80" y="500" font-family="'IBM Plex Sans', sans-serif" font-size="30" font-weight="600" fill="#142440">Mark Thebault</text>
+  <text x="80" y="538" font-family="'IBM Plex Mono', monospace" font-size="20" fill="#706c61">www.mark-thebault.pro</text>
+  <!-- title block corner -->
+  <g transform="translate(940,470)">
+    <rect x="0" y="0" width="200" height="80" fill="none" stroke="#142440" stroke-width="1.5"/>
+    <line x1="0" y1="28" x2="200" y2="28" stroke="#142440" stroke-width="1.5"/>
+    <text x="12" y="19" font-family="'IBM Plex Mono', monospace" font-size="13" letter-spacing="2" fill="#142440">DRAWING</text>
+    <text x="188" y="19" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="13" letter-spacing="2" fill="#142440">MT—2025</text>
+    <text x="12" y="58" font-family="'IBM Plex Mono', monospace" font-size="15" fill="#706c61">REV 2025.06 — A</text>
+  </g>
+</svg>
