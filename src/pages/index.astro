@@ -9,6 +9,26 @@ const articles = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const latest = articles.slice(0, 4);
+const sameAs = SOCIALS.filter((social) => social.href.startsWith('http')).map((social) => social.href);
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+    inLanguage: 'en',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: SITE.name,
+    url: SITE.url,
+    jobTitle: SITE.role,
+    description: SITE.description,
+    sameAs,
+  },
+];
 
 // reading time per article (rendered body word count)
 function minutesFor(body: string | undefined) {
@@ -17,7 +37,7 @@ function minutesFor(body: string | undefined) {
 }
 ---
 
-<BaseLayout>
+<BaseLayout schema={schema}>
   <!-- ============ HERO: the title block ============ -->
   <section class="hero wrap">
     <div class="hero-grid">

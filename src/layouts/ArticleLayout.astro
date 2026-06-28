@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import { SITE, SOCIALS } from '../consts';
 
 interface Props {
   title: string;
@@ -12,9 +13,36 @@ interface Props {
 }
 
 const { title, description, pubDate, updatedDate, tags = [], minutes } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).toString();
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: SITE.name,
+    url: SITE.url,
+    sameAs: SOCIALS.filter((social) => social.href.startsWith('http')).map((social) => social.href),
+  },
+  publisher: {
+    '@type': 'Person',
+    name: SITE.name,
+    url: SITE.url,
+  },
+  mainEntityOfPage: canonical,
+  url: canonical,
+  keywords: tags,
+  inLanguage: 'en',
+};
+
+if (updatedDate) {
+  schema.dateModified = updatedDate.toISOString();
+}
 ---
 
-<BaseLayout title={title} description={description} type="article">
+<BaseLayout title={title} description={description} type="article" schema={schema}>
   <article class="wrap article">
     <a href="/articles/" class="back mono">← All writing</a>
 

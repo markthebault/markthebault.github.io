@@ -1,6 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE, SOCIALS } from '../consts';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  url: SITE.url,
+  jobTitle: SITE.role,
+  description: SITE.description,
+  sameAs: SOCIALS.filter((social) => social.href.startsWith('http')).map((social) => social.href),
+};
 
 const principles = [
   {
@@ -24,6 +33,7 @@ const principles = [
 <BaseLayout
   title="About"
   description="Mark Thebault — principal architect working across Agentic AI and platform engineering."
+  schema={schema}
 >
   <section class="wrap about-hero">
     <div class="ah-grid">
