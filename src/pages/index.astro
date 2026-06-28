@@ -79,7 +79,7 @@ function minutesFor(body: string | undefined) {
       {
         latest.map((a, i) => (
           <ArticleCard
-            href={`/articles/${a.id}/`}
+            href={`/articles/${a.id.replace(/^\d{4}-\d{2}-\d{2}_/, '')}/`}
             title={a.data.title}
             description={a.data.description}
             pubDate={a.data.pubDate}

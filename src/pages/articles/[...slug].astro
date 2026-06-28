@@ -6,7 +6,7 @@ import readingTime from 'reading-time';
 export async function getStaticPaths() {
   const articles = await getCollection('articles', ({ data }) => !data.draft);
   return articles.map((article) => ({
-    params: { slug: article.id },
+    params: { slug: article.id.replace(/^\d{4}-\d{2}-\d{2}_/, '') },
     props: { article },
   }));
 }

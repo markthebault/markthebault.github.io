@@ -16,7 +16,7 @@ export async function GET(context) {
       description: article.data.description,
       pubDate: article.data.pubDate,
       categories: article.data.tags,
-      link: `/articles/${article.id}/`,
+      link: `/articles/${article.id.replace(/^\d{4}-\d{2}-\d{2}_/, '')}/`,
     })),
     customData: `<language>en-us</language>`,
   });
