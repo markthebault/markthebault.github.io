@@ -5,24 +5,28 @@ pubDate: 2026-07-04
 tags: ['agentic-ai', 'engineering', 'llm', 'workflow']
 ---
 
-AI models have come a long way. They can now perform many engineering tasks
-that used to require a developer sitting in front of an IDE: reading code,
-editing files, writing tests, explaining failures, searching documentation, and
-proposing implementation plans.
+The first time an agent feels magical is usually not the dangerous moment. The
+dangerous moment is the third or fourth task, when it has already fixed a bug,
+written a test, followed a pattern in the repo, and you start treating it like it
+understands the product.
 
-But there is still a hard limit: they do what you ask, not necessarily what you
-meant.
+Then you ask for something slightly underspecified.
 
-That is the mindset shift. Do not treat a language model as a complete engineer
-who has been in your company for years, understands the product, knows the
-architecture, remembers every business rule, and can infer what you forgot to
-say. A better mental model is a very fast new expert employee: strong general
-knowledge, strong execution speed, weak local context, no real ownership, and no
-reliable judgment unless you provide the information and constraints they need.
+It edits the right files for the wrong reason. Or it keeps an obsolete decision
+from earlier in the chat. Or it reads a wall of logs, latches onto the least
+important part, and confidently "fixes" the symptom. The output is clean enough
+that it looks intentional, but the work is still pointed at the wrong target.
 
-With current models, the work is no longer only about knowing the answer
-yourself. It is about asking for the right work, giving the right context, and
-verifying the result.
+That is the limit I keep coming back to: models do what you ask, not necessarily
+what you meant.
+
+I find it more useful to treat an agent like a very fast new engineer who has
+not joined the company yet. It can read, edit, test, explain, and search faster
+than I can. It does not know which tradeoffs are sacred, which docs are stale,
+which integration is fragile, or which requirement was deliberately left out.
+
+The job changes from "can I write this code?" to "can I create the conditions
+where delegating this work is likely to succeed?"
 
 <figure className="agent-figure">
   <div className="flow-strip" aria-label="Progression from vibe coding to agentic engineering">
@@ -35,27 +39,28 @@ verifying the result.
   <figcaption>Agentic engineering turns a single prompt into a controlled workflow.</figcaption>
 </figure>
 
-Models do not think like humans. They imitate reasoning patterns, but they do
-not share your assumptions. They do not naturally understand what is "between
-the lines." If you omit important context, they will usually still answer,
-because answering is what they are optimized to do.
+Vibe coding is great for exploration. I use it when the cost of being wrong is
+low and the point is to discover what shape a solution could have.
 
-Agentic engineering is the discipline of making that behavior useful in real
-software work. It is the move from casual vibe coding to a structured way of
-delegating work to agents: clear context, clear plans, controlled tools,
-repeatable workflows, and verification loops.
+Production work needs a different posture. Agentic engineering, at least the way
+I think about it, is the discipline of making agent work boring enough to trust:
+small context, explicit constraints, scoped tools, repeatable workflows, and
+verification after each step.
 
 ## Context engineering
 
-Models can perform very well when they know what to do, where to do it, and
-which information matters. That is why context is one of the most important
-resources in agentic engineering.
+The most common mistake I see is trying to solve agent reliability by dumping
+more information into the chat.
 
-Context engineering is the practice of deciding what information the model sees,
-when it sees it, and how that information is structured.
+That feels reasonable. If the model missed something, give it more context.
+Attach more docs. Keep the whole conversation. Enable every connector. Paste the
+whole failing log.
 
-The goal is not to give the model everything. The goal is to give it the minimum
-complete context required to do the job well.
+Sometimes that helps. Often it just gives the model more ways to be distracted.
+
+Context engineering is the practice of deciding what the model sees, when it
+sees it, and in what order. The goal is not maximum context. The goal is the
+smallest complete context that lets the agent do the job.
 
 <figure className="agent-figure">
   <div className="context-funnel" aria-label="Context funnel">
@@ -68,30 +73,22 @@ complete context required to do the job well.
   <figcaption>More context is not always better. The useful context is selected, ordered, and current.</figcaption>
 </figure>
 
-If you want an LLM to perform the right action in the right place and produce
-the result you actually want, you need to be intentional about context.
+Everything you give the model can influence the answer. Relevant information
+helps. Irrelevant information competes. Old requirements, stale files, repeated
+logs, unused tool definitions, and half-remembered decisions from earlier in a
+session all become part of the soup.
 
-Everything you give to the model can influence its answer. Relevant information
-helps. Irrelevant information can contaminate the reasoning. Old requirements,
-noisy logs, unused tool descriptions, stale files, and unrelated documentation
-can all compete with the real task.
-
-That means more context is not always better.
-
-Even if a model technically supports a very large context window, the useful
-part of that window is smaller in practice. Long context increases cost,
-latency, and the chance that the model pays attention to the wrong thing. A
-model with a clean 20,000-token context can often perform better than the same
-model with 150,000 tokens of mixed logs, old discussion, unrelated files, and
-tool descriptions.
+Large context windows are useful, but they do not remove the need for judgment.
+A clean 20,000-token session often beats a 150,000-token session full of old
+discussion, noisy logs, and unrelated files.
 
 The practical rule is simple:
 
 > Give the model everything it needs, but nothing that only makes the session noisy.
 
-## High-level guidelines
+## Habits that changed my results
 
-There are several ways to reduce context size without starving the agent.
+The biggest improvements have been small and unglamorous.
 
 Start new sessions for new tasks. A long conversation accumulates assumptions,
 decisions, dead ends, and outdated instructions. When the task changes, a fresh
@@ -116,7 +113,8 @@ error, the stack trace, the changed files, and the likely affected area.
 ## Minimal project instructions
 
 Project instruction files such as `AGENTS.md`, `CLAUDE.md`, or similar guidance
-files should be short and specific.
+files are easy to overfill. I have done it. The file starts as a helpful map,
+then slowly turns into a motivational poster with commands attached.
 
 There is no need to explain that a repository is TypeScript, Python, .NET, Java,
 or another common stack if the model can infer that from the files. There is
@@ -151,11 +149,11 @@ This kind of file gives the agent information it cannot reliably guess.
 
 ## Disable tools when they are not needed
 
-MCP tools are powerful, but they are not free.
+Tools are also context.
 
-Tool definitions are added to the agent's context. That means every enabled MCP
-server can increase token usage, add latency, and distract the model with tools
-it may never need for the current task.
+Every enabled connector, MCP server, and tool description gives the model another
+possible action. That is powerful when the task needs it. It is noise when the
+task does not.
 
 If a task is purely local code editing, the agent may not need access to Jira,
 Slack, Confluence, GitHub, cloud dashboards, or deployment systems. Keeping
@@ -169,12 +167,11 @@ agent can stay lightweight, while a documentation sub-agent has access to
 Confluence, or a delivery sub-agent has access to CI/CD tools. The main agent
 calls the specialist only when that information is needed.
 
-## Compress the conversation
+## Keep the conversation lean
 
-The less useless text you carry forward, the less context pollution you create.
+I have become much more willing to be blunt with agents.
 
-Instead of long explanations, remove filler, pleasantries, hedging, and
-unnecessary words when the agent does not need them.
+Not rude. Just compact.
 
 Normal:
 
@@ -194,17 +191,19 @@ The important rule is that technical information must stay exact. Code,
 commands, API names, and error messages should not be damaged by compression.
 When safety or clarity matters, switch back to normal language.
 
-Tools such as [`rtk`](https://github.com/rtk-ai/rtk) apply the same idea to
-command output by filtering, grouping, truncating, and deduplicating logs before
-they enter the model context.
+The same applies to command output. A 2,000-line test failure is rarely 2,000
+lines of signal. Keep the failing command, the first useful error, the affected
+files, and the stack frame that actually points somewhere.
 
 ## Use sub-agents to avoid the God Agent
 
-Sub-agents solve the "God Agent" anti-pattern.
+The "God Agent" is tempting: one agent, every tool, every instruction, every
+document, every responsibility.
 
-A God Agent has too many tools, too many instructions, too many
-responsibilities, and too much context. It can answer many things, but it
-becomes expensive, slow, hard to debug, and more likely to make mistakes.
+It works surprisingly well until it does not. Then it is hard to debug because
+you do not know whether the failure came from the task prompt, the tool list,
+the retrieval result, the stale conversation history, or the model simply making
+a bad call.
 
 Sub-agents split work into specialized modules. Each one has a narrow
 responsibility, a small context, and the minimum tools needed for the job.
@@ -235,64 +234,37 @@ Use sub-agents when a task naturally separates into different kinds of work:
 A simple pattern is to use a lightweight router agent. The router reads the user
 request, identifies the type of work, and delegates it to the right specialist.
 
-The important rule is context economy:
+I do not think every team needs a complicated multi-agent system. For many
+workflows, the useful version is modest:
 
-> Each sub-agent should receive only the tools, instructions, and history required for its specific job.
+- a code agent edits files and runs local validation
+- a docs agent retrieves source-of-truth context
+- a CI agent reads pipeline logs and extracts the real failure
+- a security agent reviews risky diffs against known rules
 
-This improves accuracy, lowers cost, and makes failures easier to debug.
+Each specialist should receive only the tools, instructions, and history needed
+for that job. That is the whole trick.
 
 ## Plan the work
-
-Good agentic engineering starts before code generation.
 
 Most bad AI coding outcomes are not caused by weak syntax generation. They are
 caused by weak task definition. The agent was asked to "build the feature"
 without a precise definition of the feature, the constraints, the affected
 files, the expected behavior, or the verification path.
 
-Planning gives the model a smaller target.
+Planning gives the model a smaller target. It also gives you something to
+disagree with before code changes start.
 
-Before delegating implementation, define:
-
-- the problem
-- the user-visible behavior
-- the non-goals
-- the affected modules
-- the constraints
-- the acceptance criteria
-- the test strategy
-- the rollback or review concerns
-
-For small tasks, this can be a few bullets. For larger work, it should become a
-specification.
+For small tasks, a few bullets are enough: problem, desired behavior, files that
+probably matter, constraints, tests to run. For larger work, write a real spec.
 
 ## Spec-driven development
 
-Spec-driven development means writing a clear specification before
-implementation, then using that specification as the contract for the work.
+Spec-driven development sounds heavier than it needs to be. In practice, it can
+be a short document that answers the questions the agent would otherwise guess.
 
-In an agentic workflow, the spec is especially important because it becomes the
-agent's source of truth. It prevents the model from inventing requirements,
-guessing hidden constraints, or optimizing for a vague interpretation of the
-task.
-
-A useful spec usually includes:
-
-- background and problem statement
-- current behavior
-- desired behavior
-- user stories or use cases
-- explicit non-goals
-- technical constraints
-- affected systems
-- data model changes
-- API or UI changes
-- acceptance criteria
-- test plan
-- rollout or migration notes
-
-The spec does not need to be huge. It needs to be clear enough that a new
-engineer, or an agent, can implement the work without repeatedly guessing.
+What is broken? What should change? What should not change? Which modules are in
+scope? How will we know the work is done?
 
 The practical workflow:
 
@@ -305,39 +277,25 @@ idea -> plan.md -> todo.md -> implementation -> tests -> review
 `todo.md` breaks the plan into small implementation steps.
 
 The agent works through the todo list one item at a time, updating the status as
-it goes. This keeps the work inspectable and reduces the chance that the model
-makes a large uncontrolled change.
+it goes. This is slower than one-shot prompting, but it is much easier to review.
 
 ## Agentic knowledge
 
-Agents need knowledge in order to perform well. Some of that knowledge is
-technical, some is organizational, and some is business-specific.
+The hard part is not only technical knowledge. Agents also need organizational
+and business knowledge.
 
-The challenge is deciding how to give knowledge to agents without flooding every
-session with every document.
-
-There are different levels of knowledge sharing:
-
-- simple project instructions
-- reusable skills
-- local documentation
-- business knowledge bases
-- retrieval tools
-- domain-specific sub-agents
-
-The more complex the organization, the more important this becomes.
+They need to know which service owns a concept, which integration is fragile,
+which compliance rule constrains a field, which document is still authoritative,
+and which one everyone ignores. Without that, they guess.
 
 ## Skills make workflows repeatable
 
-A skill is a reusable way to teach an agent a workflow, a tool, a process, or a
-domain-specific pattern.
+Skills are useful when you notice yourself typing the same instruction for the
+fifth time.
 
-A skill can contain instructions, examples, scripts, templates, checklists,
-reference documents, tool usage guidance, and expected output formats.
-
-The purpose of a skill is repeatability. Instead of rewriting the same long
-prompt every time, you package the workflow so the agent can execute it
-consistently.
+Instead of relying on memory, package the workflow: when to use it, what files to
+inspect, which tools to call, what output format to produce, and how to verify
+the result.
 
 Examples:
 
@@ -349,31 +307,14 @@ Examples:
 - how to review code against team standards
 - how to create a new module in a specific repository
 
-The best way to create a skill is not to write it before you understand the
-work. First, do the task manually with the agent several times. Notice what
-instructions you repeat, what the model misunderstands, what examples help, what
-files it needs, and what output format works best.
-
-Then turn that repeated workflow into a skill.
-
-A skill should include:
-
-- when to use it
-- when not to use it
-- required inputs
-- required context
-- step-by-step workflow
-- tools the agent should use
-- files or docs the agent should inspect
-- verification steps
-- expected final output
-
-A skill is not a one-off prompt. It should be refined and optimized over time.
+I would not start by writing a library of generic skills. Do the work manually
+with an agent a few times first. Notice where it misunderstands you. Notice which
+examples help. Then turn that repeated pattern into a skill.
 
 ## Business knowledge is part of engineering
 
-Technical instructions are not enough. Many of the most important engineering
-decisions depend on business knowledge:
+Technical instructions are not enough. Many implementation choices depend on
+business knowledge:
 
 - customer types
 - pricing rules
@@ -385,11 +326,8 @@ decisions depend on business knowledge:
 - legal or security requirements
 - internal ownership boundaries
 
-If this knowledge is not available to the agent, it will guess. Sometimes that
-guess will look reasonable and still be wrong.
-
-Business knowledge should be explicit, discoverable, and linked to the workflows
-that need it.
+If this knowledge is not available, the agent will make up a reasonable-looking
+version of reality. That is worse than an obvious failure.
 
 The simplest approach is to keep specific documentation in the repository or in
 a connected documentation repository:
@@ -403,16 +341,15 @@ a connected documentation repository:
 
 This works well when the knowledge is stable and not too large.
 
-Good documentation for agents has short sections, concrete examples,
-source-of-truth statements, clear ownership, links to related files, update
-dates when relevant, and explicit "do" and "do not" rules.
+Good documentation for agents is not necessarily long. It has short sections,
+concrete examples, source-of-truth statements, clear ownership, links to related
+files, update dates when relevant, and explicit "do" and "do not" rules.
 
-For complex domains, simple docs may not be enough. You may need a domain
-knowledge sub-agent.
+For complex domains, I prefer a domain knowledge sub-agent. Its job is not to
+write code. Its job is to retrieve, filter, and explain domain knowledge for the
+coding agent.
 
-This sub-agent's job is not to write code. Its job is to retrieve, filter, and
-explain domain knowledge for the main agent. The main agent asks focused
-questions:
+The main agent asks focused questions:
 
 - "What is the source-of-truth rule for refund eligibility?"
 - "Which document defines the onboarding flow?"
@@ -424,10 +361,9 @@ then uses that answer as context for implementation.
 
 ## Knowledge wikis
 
-Andrej Karpathy has described the idea of a knowledge wiki as a compact, curated
-source of truth for agents. The practical idea is simple: instead of expecting
-models to rediscover project knowledge every time, maintain a small set of
-high-value documents that explain the system.
+One pattern I like is a small knowledge wiki for agents. Not a replacement for
+full documentation. More like an orientation layer: enough for the agent to know
+where to look and what matters.
 
 A useful agent knowledge wiki might contain:
 
@@ -442,8 +378,8 @@ A useful agent knowledge wiki might contain:
 - glossary
 - known pitfalls
 
-This is not a replacement for full documentation. It is an index and orientation
-layer. It helps an agent know where to look and what matters.
+The most important page is often the one called something boring like
+`known-pitfalls.md`. That is where the real local knowledge tends to live.
 
 ## From vibe coding to engineering discipline
 
@@ -451,27 +387,14 @@ Vibe coding is useful for exploration. It helps you move fast, prototype, and
 discover possibilities. But it becomes dangerous when it is used as the default
 mode for production engineering.
 
-Agentic engineering adds discipline:
+The line I try to keep clear is ownership.
 
-- clear task definition
-- small context
-- focused tools
-- reusable skills
-- spec-driven planning
-- sub-agent specialization
-- source-of-truth documentation
-- verification after each step
-- human judgment for product and risk decisions
+The model can generate code, inspect a repo, and run the checks. The engineer
+still owns the outcome: the product judgment, the risk, the review, and the
+decision to ship.
 
-The model can generate code. The engineer still owns the outcome.
-
-That is the core principle.
-
-Use agents as powerful collaborators, not autonomous owners. Give them the
-context they need, constrain the work, verify the result, and improve the
-workflow over time.
-
-That is how you move from vibe coding to agentic engineering.
+That is the difference between using agents as a fun autocomplete and using them
+as part of an engineering system.
 
 <style>{`
   .agent-figure {
