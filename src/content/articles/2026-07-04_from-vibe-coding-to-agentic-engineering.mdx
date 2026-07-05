@@ -1,32 +1,32 @@
 ---
 title: 'From Vibe Coding to Agentic Engineering'
-description: 'A practical guide to moving from casual AI-assisted coding to structured, verifiable agent workflows built on context, specs, skills, and domain knowledge.'
+description: 'A shorter note on treating AI agents less like magic autocomplete and more like fast new employees who need context, boundaries, and review.'
 pubDate: 2026-07-04
 tags: ['agentic-ai', 'engineering', 'llm', 'workflow']
 ---
 
-The first time an agent feels magical is usually not the dangerous moment. The
-dangerous moment is the third or fourth task, when it has already fixed a bug,
-written a test, followed a pattern in the repo, and you start treating it like it
-understands the product.
+The models have come a long way. They are very good now. Sometimes dangerously
+good, because the output looks like the model understood the work.
 
-Then you ask for something slightly underspecified.
+But the core problem has not changed: models do what you tell them to do. They
+do not always know what you wanted to do.
 
-It edits the right files for the wrong reason. Or it keeps an obsolete decision
-from earlier in the chat. Or it reads a wall of logs, latches onto the least
-important part, and confidently "fixes" the symptom. The output is clean enough
-that it looks intentional, but the work is still pointed at the wrong target.
+That sounds like a small difference. In real engineering work it is not. You ask
+for a change, the agent edits the right files, the tests pass, and still the
+solution can be pointed at the wrong target. It did not know the product. It did
+not know the tradeoff behind the requirement. It did not know the thing you did
+not say because it was obvious to you.
 
-That is the limit I keep coming back to: models do what you ask, not necessarily
-what you meant.
+This is why I think the useful mindset is not "the agent is a complete engineer."
+It is closer to: this is a very fast new employee with access to a huge amount
+of knowledge, but almost no local judgment yet.
 
-I find it more useful to treat an agent like a very fast new engineer who has
-not joined the company yet. It can read, edit, test, explain, and search faster
-than I can. It does not know which tradeoffs are sacred, which docs are stale,
-which integration is fragile, or which requirement was deliberately left out.
+It can read, code, search, test, summarize, and use tools faster than I can. But
+it does not understand the company, the customer, the history of the repo, or the
+meaning behind an incomplete sentence. It will still try to answer.
 
-The job changes from "can I write this code?" to "can I create the conditions
-where delegating this work is likely to succeed?"
+So the work changes. The question is less "can the model write the code?" and
+more "did I create the conditions where it can do the right work?"
 
 <figure className="agent-figure">
   <div className="flow-strip" aria-label="Progression from vibe coding to agentic engineering">
@@ -39,28 +39,29 @@ where delegating this work is likely to succeed?"
   <figcaption>Agentic engineering turns a single prompt into a controlled workflow.</figcaption>
 </figure>
 
-Vibe coding is great for exploration. I use it when the cost of being wrong is
-low and the point is to discover what shape a solution could have.
+Vibe coding is still useful. I use it when I want to explore, prototype, or see
+what shape an idea could have. The cost of being wrong is low, so speed matters
+more than structure.
 
-Production work needs a different posture. Agentic engineering, at least the way
-I think about it, is the discipline of making agent work boring enough to trust:
-small context, explicit constraints, scoped tools, repeatable workflows, and
-verification after each step.
+Production work needs a different posture. Agentic engineering, to me, is making
+agent work boring enough to trust: clear context, small scope, useful tools, and
+verification after the work.
 
 ## Context engineering
 
-The most common mistake I see is trying to solve agent reliability by dumping
-more information into the chat.
+Models can do very good work when they know what to do, where to do it, and have
+the right information around the task.
 
-That feels reasonable. If the model missed something, give it more context.
-Attach more docs. Keep the whole conversation. Enable every connector. Paste the
-whole failing log.
+This is why context matters so much. Every piece of information you put in the
+context can influence the answer. Relevant information helps. Irrelevant
+information contaminates the work.
 
-Sometimes that helps. Often it just gives the model more ways to be distracted.
+It is tempting to fix agent mistakes by adding more: more docs, more logs, more
+chat history, more tools, more instructions. Sometimes that helps. Very often it
+just gives the model more things to optimize around that are not the real task.
 
-Context engineering is the practice of deciding what the model sees, when it
-sees it, and in what order. The goal is not maximum context. The goal is the
-smallest complete context that lets the agent do the job.
+The goal is not the biggest possible context. The goal is the smallest context
+that is complete enough for the job.
 
 <figure className="agent-figure">
   <div className="context-funnel" aria-label="Context funnel">
@@ -73,56 +74,26 @@ smallest complete context that lets the agent do the job.
   <figcaption>More context is not always better. The useful context is selected, ordered, and current.</figcaption>
 </figure>
 
-Everything you give the model can influence the answer. Relevant information
-helps. Irrelevant information competes. Old requirements, stale files, repeated
-logs, unused tool definitions, and half-remembered decisions from earlier in a
-session all become part of the soup.
+A large context window is useful, but it does not remove the need to choose. A
+clean smaller session can be better than a huge session full of old decisions,
+half-relevant logs, and stale instructions.
 
-Large context windows are useful, but they do not remove the need for judgment.
-A clean 20,000-token session often beats a 150,000-token session full of old
-discussion, noisy logs, and unrelated files.
+The practical habits are simple:
 
-The practical rule is simple:
+- start a new session when the task changes
+- give the agent the files that matter, then let it expand if needed
+- summarize long logs before continuing
+- keep the tools small for the task
+- make the validation step explicit
 
-> Give the model everything it needs, but nothing that only makes the session noisy.
+This also changes how I think about `AGENTS.md`, `CLAUDE.md`, or any project
+instruction file. These files should not become a software engineering textbook.
 
-## Habits that changed my results
+The model can usually infer that a repo is TypeScript, Python, .NET, or Java.
+It does not need generic advice like "write clean code" or "follow best
+practices." Those words are too vague to change the result.
 
-The biggest improvements have been small and unglamorous.
-
-Start new sessions for new tasks. A long conversation accumulates assumptions,
-decisions, dead ends, and outdated instructions. When the task changes, a fresh
-session with a short summary is often better than dragging the whole history
-forward.
-
-Use sub-agents for specialized work. A main agent does not need every tool,
-every document, and every workflow in its own context. A specialized sub-agent
-can handle one bounded task with only the tools and instructions it needs.
-
-Keep repository summaries available. A short, accurate summary of the repository
-structure, commands, architectural conventions, and ownership boundaries can
-save the model from repeatedly scanning the whole codebase.
-
-Prefer focused file reads over broad ingestion. Ask the agent to inspect the
-files directly related to the task, then expand only when necessary.
-
-Summarize long outputs before continuing. Logs, test failures, and command
-outputs should be reduced to the important evidence: the failing command, the
-error, the stack trace, the changed files, and the likely affected area.
-
-## Minimal project instructions
-
-Project instruction files such as `AGENTS.md`, `CLAUDE.md`, or similar guidance
-files are easy to overfill. I have done it. The file starts as a helpful map,
-then slowly turns into a motivational poster with commands attached.
-
-There is no need to explain that a repository is TypeScript, Python, .NET, Java,
-or another common stack if the model can infer that from the files. There is
-also no need to include generic advice such as "write clean code" or "follow
-best practices." Modern models already know those words, and they are too vague
-to be useful.
-
-What the model does not know is your local reality:
+What the model does not know is the local reality:
 
 - how the codebase is organized
 - which commands validate the work
@@ -147,66 +118,45 @@ A good instruction file is a map, not a software engineering textbook.
 
 This kind of file gives the agent information it cannot reliably guess.
 
-## Disable tools when they are not needed
+## Tools are also context
 
-Tools are also context.
+MCP tools, connectors, and command output are not neutral. They all take space
+in the model's working context, and they all suggest possible actions.
 
-Every enabled connector, MCP server, and tool description gives the model another
-possible action. That is powerful when the task needs it. It is noise when the
-task does not.
+If I am doing a local code edit, I do not always need Jira, Slack, Confluence,
+GitHub, cloud dashboards, and deployment tools in the same main agent context.
+They might be useful somewhere in the workflow, but they do not need to be
+present all the time.
 
-If a task is purely local code editing, the agent may not need access to Jira,
-Slack, Confluence, GitHub, cloud dashboards, or deployment systems. Keeping
-those tools enabled by default can make the main agent heavier and less focused.
+Disabling tools that are not required can reduce cost, but more importantly it
+keeps the agent focused. The same applies to command output. A 2,000-line test
+failure is not 2,000 lines of useful signal. Keep the command, the first real
+error, the stack frame that points somewhere, and the affected files.
 
-Disable tools that are not required for the task. When possible, give agents the
-smallest set of tools that can complete the work.
-
-Another option is to use specialized sub-agents. For example, the main coding
-agent can stay lightweight, while a documentation sub-agent has access to
-Confluence, or a delivery sub-agent has access to CI/CD tools. The main agent
-calls the specialist only when that information is needed.
-
-## Keep the conversation lean
-
-I have become much more willing to be blunt with agents.
-
-Not rude. Just compact.
-
-Normal:
-
-```text
-The issue is likely caused by the authentication middleware checking token
-expiration incorrectly. I recommend updating the comparison operator and then
-running the related tests.
-```
-
-Compressed:
+I have become much more willing to talk to agents in a compact way:
 
 ```text
 Bug in auth middleware. Token expiry check wrong. Fix comparison. Run auth tests.
 ```
 
-The important rule is that technical information must stay exact. Code,
-commands, API names, and error messages should not be damaged by compression.
-When safety or clarity matters, switch back to normal language.
+Not because the model cannot understand normal language. It can. But compact
+instructions keep the important details visible. The only rule is to avoid
+damaging technical information. Commands, API names, errors, and filenames need
+to stay exact.
 
-The same applies to command output. A 2,000-line test failure is rarely 2,000
-lines of signal. Keep the failing command, the first useful error, the affected
-files, and the stack frame that actually points somewhere.
-
-## Use sub-agents to avoid the God Agent
+## Use sub-agents instead of one huge agent
 
 The "God Agent" is tempting: one agent, every tool, every instruction, every
 document, every responsibility.
 
-It works surprisingly well until it does not. Then it is hard to debug because
-you do not know whether the failure came from the task prompt, the tool list,
-the retrieval result, the stale conversation history, or the model simply making
-a bad call.
+It works until it does not. Then it is hard to understand the failure. Was the
+prompt unclear? Was the wrong tool available? Did an old decision stay in the
+conversation? Did retrieval bring the wrong document? You do not know.
 
-Sub-agents split work into specialized modules. Each one has a narrow
-responsibility, a small context, and the minimum tools needed for the job.
+Sub-agents help because they keep the main agent smaller. The main agent can
+route the work. A documentation agent can read Confluence or internal docs. A CI
+agent can inspect logs. A security agent can review risky changes. Each one gets
+the context and tools for its job, not the whole company.
 
 <figure className="agent-figure wide">
   <div className="agent-map" aria-label="Sub-agent map">
@@ -220,181 +170,72 @@ responsibility, a small context, and the minimum tools needed for the job.
   <figcaption>The main agent should route work. It should not carry every tool and every document all the time.</figcaption>
 </figure>
 
-Use sub-agents when a task naturally separates into different kinds of work:
-
-- code implementation
-- test generation
-- documentation lookup
-- CI/CD investigation
-- security review
-- database migration review
-- product requirement clarification
-- release note generation
-
-A simple pattern is to use a lightweight router agent. The router reads the user
-request, identifies the type of work, and delegates it to the right specialist.
-
-I do not think every team needs a complicated multi-agent system. For many
-workflows, the useful version is modest:
-
-- a code agent edits files and runs local validation
-- a docs agent retrieves source-of-truth context
-- a CI agent reads pipeline logs and extracts the real failure
-- a security agent reviews risky diffs against known rules
-
-Each specialist should receive only the tools, instructions, and history needed
-for that job. That is the whole trick.
-
-## Plan the work
-
-Most bad AI coding outcomes are not caused by weak syntax generation. They are
-caused by weak task definition. The agent was asked to "build the feature"
-without a precise definition of the feature, the constraints, the affected
-files, the expected behavior, or the verification path.
-
-Planning gives the model a smaller target. It also gives you something to
-disagree with before code changes start.
-
-For small tasks, a few bullets are enough: problem, desired behavior, files that
-probably matter, constraints, tests to run. For larger work, write a real spec.
+I do not think every team needs a complicated multi-agent architecture. The
+simple version is already useful: keep the coding agent focused, and call a
+specialist when the task needs different knowledge or different tools.
 
 ## Spec-driven development
 
-Spec-driven development sounds heavier than it needs to be. In practice, it can
-be a short document that answers the questions the agent would otherwise guess.
+Many AI coding failures are not syntax failures. They are task definition
+failures.
 
-What is broken? What should change? What should not change? Which modules are in
-scope? How will we know the work is done?
+The agent was asked to "build the feature," but the feature was not really
+defined. Scope was unclear. Constraints were missing. The expected behavior was
+half in someone's head. The verification path was not written down.
 
-The practical workflow:
+Spec-driven development sounds heavier than it needs to be. For a lot of work,
+it can be a short `plan.md` and a `todo.md`.
+
+I like this flow:
 
 ```text
 idea -> plan.md -> todo.md -> implementation -> tests -> review
 ```
 
-`plan.md` explains what should be built and why.
-
-`todo.md` breaks the plan into small implementation steps.
-
-The agent works through the todo list one item at a time, updating the status as
-it goes. This is slower than one-shot prompting, but it is much easier to review.
+The plan explains what should change and why. The todo breaks the work into
+small steps. The agent updates the list as it works. This is slower than a
+one-shot prompt, but the work becomes much easier to review.
 
 ## Agentic knowledge
 
-The hard part is not only technical knowledge. Agents also need organizational
-and business knowledge.
+The next problem is knowledge. Not public knowledge, because the model has a lot
+of that already. The hard part is company knowledge.
 
-They need to know which service owns a concept, which integration is fragile,
-which compliance rule constrains a field, which document is still authoritative,
-and which one everyone ignores. Without that, they guess.
+Agents need to know which service owns a concept, which integration is fragile,
+which document is still true, which one everyone ignores, which compliance rule
+changes the implementation, and which customer behavior matters.
 
-## Skills make workflows repeatable
-
-Skills are useful when you notice yourself typing the same instruction for the
-fifth time.
-
-Instead of relying on memory, package the workflow: when to use it, what files to
-inspect, which tools to call, what output format to produce, and how to verify
-the result.
-
-Examples:
-
-- how to create a pull request in your organization
-- how to interact with Jira
-- how to investigate a failing pipeline
-- how to generate release notes
-- how to update API documentation
-- how to review code against team standards
-- how to create a new module in a specific repository
-
-I would not start by writing a library of generic skills. Do the work manually
-with an agent a few times first. Notice where it misunderstands you. Notice which
-examples help. Then turn that repeated pattern into a skill.
-
-## Business knowledge is part of engineering
-
-Technical instructions are not enough. Many implementation choices depend on
-business knowledge:
-
-- customer types
-- pricing rules
-- compliance requirements
-- domain vocabulary
-- product behavior
-- support policies
-- operational constraints
-- legal or security requirements
-- internal ownership boundaries
-
-If this knowledge is not available, the agent will make up a reasonable-looking
+If that knowledge is not available, the model will invent a reasonable-looking
 version of reality. That is worse than an obvious failure.
 
-The simplest approach is to keep specific documentation in the repository or in
-a connected documentation repository:
+The simple version is to keep specific docs close to the work: domain rules,
+architecture notes, testing strategy, API contracts, release process, known
+pitfalls. Short and current beats long and stale.
 
-- `docs/domain.md`
-- `docs/architecture.md`
-- `docs/testing.md`
-- `docs/release-process.md`
-- `docs/business-rules.md`
-- `docs/api-contracts.md`
+The more advanced version is a domain knowledge sub-agent. Its job is not to
+write code. Its job is to fetch the right internal knowledge and return a short
+answer with sources.
 
-This works well when the knowledge is stable and not too large.
+Skills are the same idea applied to workflows. When I notice that I give the
+same instruction again and again, that is a good candidate for a skill: when to
+use it, what to inspect, what tools to call, what output to produce, and how to
+verify it.
 
-Good documentation for agents is not necessarily long. It has short sections,
-concrete examples, source-of-truth statements, clear ownership, links to related
-files, update dates when relevant, and explicit "do" and "do not" rules.
+I would not start by downloading a library of generic skills and hoping it fits.
+Do the work manually with an agent a few times. See where it misunderstands you.
+See which examples help. Then turn that repeated pattern into a skill.
 
-For complex domains, I prefer a domain knowledge sub-agent. Its job is not to
-write code. Its job is to retrieve, filter, and explain domain knowledge for the
-coding agent.
+## The engineer still owns the work
 
-The main agent asks focused questions:
+This is the line I want to keep clear.
 
-- "What is the source-of-truth rule for refund eligibility?"
-- "Which document defines the onboarding flow?"
-- "What are the compliance constraints for storing this field?"
-- "Which service owns this business concept?"
+The model can generate code, inspect a repo, call tools, and run checks. That is
+very powerful. But the engineer still owns the product judgment, the risk, the
+review, and the decision to ship.
 
-The domain sub-agent returns a concise answer with sources. The coding agent
-then uses that answer as context for implementation.
-
-## Knowledge wikis
-
-One pattern I like is a small knowledge wiki for agents. Not a replacement for
-full documentation. More like an orientation layer: enough for the agent to know
-where to look and what matters.
-
-A useful agent knowledge wiki might contain:
-
-- repository overview
-- architecture map
-- key business concepts
-- service ownership
-- common workflows
-- testing strategy
-- deployment model
-- important decisions
-- glossary
-- known pitfalls
-
-The most important page is often the one called something boring like
-`known-pitfalls.md`. That is where the real local knowledge tends to live.
-
-## From vibe coding to engineering discipline
-
-Vibe coding is useful for exploration. It helps you move fast, prototype, and
-discover possibilities. But it becomes dangerous when it is used as the default
-mode for production engineering.
-
-The line I try to keep clear is ownership.
-
-The model can generate code, inspect a repo, and run the checks. The engineer
-still owns the outcome: the product judgment, the risk, the review, and the
-decision to ship.
-
-That is the difference between using agents as a fun autocomplete and using them
-as part of an engineering system.
+Vibe coding is a good way to explore. Agentic engineering is what starts when
+you want the work to be repeatable, reviewable, and safe enough to use in real
+systems.
 
 <style>{`
   .agent-figure {
