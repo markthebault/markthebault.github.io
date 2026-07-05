@@ -6,31 +6,78 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# Allow one concurrent deployment; let in-progress runs finish.
+# Production deploys replace the root of the Pages branch while preserving
+# active PR preview folders under /pr-preview/.
 concurrency:
-  group: pages
+  group: pages-production
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install, build, and upload
-        uses: withastro/action@v3
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Publish production site and preserve PR previews
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          publish_dir="$(mktemp -d)"
+          preserve_dir="$(mktemp -d)"
+          remote_url="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git init "$publish_dir"
+          cd "$publish_dir"
+          git remote add origin "$remote_url"
+          branch_exists=false
+
+          if git fetch --depth=1 origin gh-pages; then
+            git checkout gh-pages
+            branch_exists=true
+          else
+            git checkout --orphan gh-pages
+          fi
+
+          if [ -d pr-preview ]; then
+            cp -a pr-preview "$preserve_dir/pr-preview"
+          fi
+
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a "$GITHUB_WORKSPACE/dist/." .
+          touch .nojekyll
+
+          if [ -d "$preserve_dir/pr-preview" ]; then
+            cp -a "$preserve_dir/pr-preview" ./pr-preview
+          fi
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No production changes to publish."
+            exit 0
+          fi
+
+          git commit -m "Deploy production site"
+          if [ "$branch_exists" = true ]; then
+            git pull --rebase origin gh-pages
+          fi
+          git push origin gh-pages

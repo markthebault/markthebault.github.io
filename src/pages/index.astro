@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
-import { SITE, SOCIALS } from '../consts';
+import { SITE, SOCIALS, withBase } from '../consts';
 import readingTime from 'reading-time';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft))
@@ -54,8 +54,8 @@ function minutesFor(body: string | undefined) {
           dependable rather than demo-ware.
         </p>
         <div class="hero-cta">
-          <a href="/articles/" class="btn btn-primary">Read the writing</a>
-          <a href="/work/" class="btn btn-ghost">See the work</a>
+          <a href={withBase('/articles/')} class="btn btn-primary">Read the writing</a>
+          <a href={withBase('/work/')} class="btn btn-ghost">See the work</a>
         </div>
       </div>
 
@@ -93,7 +93,7 @@ function minutesFor(body: string | undefined) {
   <section class="wrap latest">
     <header class="sec-head">
       <p class="eyebrow">Latest writing</p>
-      <a href="/articles/" class="sec-link mono">All articles →</a>
+      <a href={withBase('/articles/')} class="sec-link mono">All articles →</a>
     </header>
     <div class="feed">
       {

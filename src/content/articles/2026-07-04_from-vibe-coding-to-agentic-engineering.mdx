@@ -1,0 +1,347 @@
+---
+title: 'From Vibe Coding to Agentic Engineering'
+description: 'A shorter note on treating AI agents less like magic autocomplete and more like fast new employees who need context, boundaries, and review.'
+pubDate: 2026-07-04
+tags: ['agentic-ai', 'engineering', 'llm', 'workflow']
+---
+
+The models have come a long way. They are very good now. Sometimes dangerously
+good, because the output looks like the model understood the work.
+
+But the core problem has not changed: models do what you tell them to do. They
+do not always know what you wanted to do.
+
+That sounds like a small difference. In real engineering work it is not. You ask
+for a change, the agent edits the right files, the tests pass, and still the
+solution can be pointed at the wrong target. It did not know the product. It did
+not know the tradeoff behind the requirement. It did not know the thing you did
+not say because it was obvious to you.
+
+This is why I think the useful mindset is not "the agent is a complete engineer."
+It is closer to: this is a very fast new employee with access to a huge amount
+of knowledge, but almost no local judgment yet.
+
+It can read, code, search, test, summarize, and use tools faster than I can. But
+it does not understand the company, the customer, the history of the repo, or the
+meaning behind an incomplete sentence. It will still try to answer.
+
+So the work changes. The question is less "can the model write the code?" and
+more "did I create the conditions where it can do the right work?"
+
+<figure className="agent-figure">
+  <div className="flow-strip" aria-label="Progression from vibe coding to agentic engineering">
+    <span>Prompt</span>
+    <span>Context</span>
+    <span>Plan</span>
+    <span>Tools</span>
+    <span>Verify</span>
+  </div>
+  <figcaption>Agentic engineering turns a single prompt into a controlled workflow.</figcaption>
+</figure>
+
+Vibe coding is still useful. I use it when I want to explore, prototype, or see
+what shape an idea could have. The cost of being wrong is low, so speed matters
+more than structure.
+
+Production work needs a different posture. Agentic engineering, to me, is making
+agent work boring enough to trust: clear context, small scope, useful tools, and
+verification after the work.
+
+## Context engineering
+
+Models can do very good work when they know what to do, where to do it, and have
+the right information around the task.
+
+This is why context matters so much. Every piece of information you put in the
+context can influence the answer. Relevant information helps. Irrelevant
+information contaminates the work.
+
+It is tempting to fix agent mistakes by adding more: more docs, more logs, more
+chat history, more tools, more instructions. Sometimes that helps. Very often it
+just gives the model more things to optimize around that are not the real task.
+
+The goal is not the biggest possible context. The goal is the smallest context
+that is complete enough for the job.
+
+<figure className="agent-figure">
+  <div className="context-funnel" aria-label="Context funnel">
+    <div>Company docs</div>
+    <div>Repository map</div>
+    <div>Relevant files</div>
+    <div>Task constraints</div>
+    <strong>Agent context</strong>
+  </div>
+  <figcaption>More context is not always better. The useful context is selected, ordered, and current.</figcaption>
+</figure>
+
+A large context window is useful, but it does not remove the need to choose. A
+clean smaller session can be better than a huge session full of old decisions,
+half-relevant logs, and stale instructions.
+
+The practical habits are simple:
+
+- start a new session when the task changes
+- give the agent the files that matter, then let it expand if needed
+- summarize long logs before continuing
+- keep the tools small for the task
+- make the validation step explicit
+
+This also changes how I think about `AGENTS.md`, `CLAUDE.md`, or any project
+instruction file. These files should not become a software engineering textbook.
+
+The model can usually infer that a repo is TypeScript, Python, .NET, or Java.
+It does not need generic advice like "write clean code" or "follow best
+practices." Those words are too vague to change the result.
+
+What the model does not know is the local reality:
+
+- how the codebase is organized
+- which commands validate the work
+- which directories are generated and should not be edited
+- which architectural boundaries must not be crossed
+- which internal APIs or patterns are preferred
+- which files contain source-of-truth business rules
+- what to do before and after each task
+
+A good instruction file is a map, not a software engineering textbook.
+
+```md
+# Agent Instructions
+
+- API route handlers live in `src/server/routes`.
+- Business logic belongs in `src/domain`.
+- Do not query the database directly from route handlers.
+- Shared UI components live in `src/components/common`.
+- For focused validation, run `npm run test -- <package>`.
+- Before changing a public API, update the related contract tests.
+```
+
+This kind of file gives the agent information it cannot reliably guess.
+
+## Tools are also context
+
+MCP tools, connectors, and command output are not neutral. They all take space
+in the model's working context, and they all suggest possible actions.
+
+If I am doing a local code edit, I do not always need Jira, Slack, Confluence,
+GitHub, cloud dashboards, and deployment tools in the same main agent context.
+They might be useful somewhere in the workflow, but they do not need to be
+present all the time.
+
+Disabling tools that are not required can reduce cost, but more importantly it
+keeps the agent focused. The same applies to command output. A 2,000-line test
+failure is not 2,000 lines of useful signal. Keep the command, the first real
+error, the stack frame that points somewhere, and the affected files.
+
+I have become much more willing to talk to agents in a compact way:
+
+```text
+Bug in auth middleware. Token expiry check wrong. Fix comparison. Run auth tests.
+```
+
+Not because the model cannot understand normal language. It can. But compact
+instructions keep the important details visible. The only rule is to avoid
+damaging technical information. Commands, API names, errors, and filenames need
+to stay exact.
+
+## Use sub-agents instead of one huge agent
+
+The "God Agent" is tempting: one agent, every tool, every instruction, every
+document, every responsibility.
+
+It works until it does not. Then it is hard to understand the failure. Was the
+prompt unclear? Was the wrong tool available? Did an old decision stay in the
+conversation? Did retrieval bring the wrong document? You do not know.
+
+Sub-agents help because they keep the main agent smaller. The main agent can
+route the work. A documentation agent can read Confluence or internal docs. A CI
+agent can inspect logs. A security agent can review risky changes. Each one gets
+the context and tools for its job, not the whole company.
+
+<figure className="agent-figure wide">
+  <div className="agent-map" aria-label="Sub-agent map">
+    <strong>Main agent</strong>
+    <span>Code agent</span>
+    <span>Docs agent</span>
+    <span>CI agent</span>
+    <span>Security agent</span>
+    <span>Release agent</span>
+  </div>
+  <figcaption>The main agent should route work. It should not carry every tool and every document all the time.</figcaption>
+</figure>
+
+I do not think every team needs a complicated multi-agent architecture. The
+simple version is already useful: keep the coding agent focused, and call a
+specialist when the task needs different knowledge or different tools.
+
+## Spec-driven development
+
+Many AI coding failures are not syntax failures. They are task definition
+failures.
+
+The agent was asked to "build the feature," but the feature was not really
+defined. Scope was unclear. Constraints were missing. The expected behavior was
+half in someone's head. The verification path was not written down.
+
+Spec-driven development sounds heavier than it needs to be. For a lot of work,
+it can be a short `plan.md` and a `todo.md`.
+
+I like this flow:
+
+```text
+idea -> plan.md -> todo.md -> implementation -> tests -> review
+```
+
+The plan explains what should change and why. The todo breaks the work into
+small steps. The agent updates the list as it works. This is slower than a
+one-shot prompt, but the work becomes much easier to review.
+
+## Agentic knowledge
+
+The next problem is knowledge. Not public knowledge, because the model has a lot
+of that already. The hard part is company knowledge.
+
+Agents need to know which service owns a concept, which integration is fragile,
+which document is still true, which one everyone ignores, which compliance rule
+changes the implementation, and which customer behavior matters.
+
+If that knowledge is not available, the model will invent a reasonable-looking
+version of reality. That is worse than an obvious failure.
+
+The simple version is to keep specific docs close to the work: domain rules,
+architecture notes, testing strategy, API contracts, release process, known
+pitfalls. Short and current beats long and stale.
+
+The more advanced version is a domain knowledge sub-agent. Its job is not to
+write code. Its job is to fetch the right internal knowledge and return a short
+answer with sources.
+
+Skills are the same idea applied to workflows. When I notice that I give the
+same instruction again and again, that is a good candidate for a skill: when to
+use it, what to inspect, what tools to call, what output to produce, and how to
+verify it.
+
+I would not start by downloading a library of generic skills and hoping it fits.
+Do the work manually with an agent a few times. See where it misunderstands you.
+See which examples help. Then turn that repeated pattern into a skill.
+
+## The engineer still owns the work
+
+This is the line I want to keep clear.
+
+The model can generate code, inspect a repo, call tools, and run checks. That is
+very powerful. But the engineer still owns the product judgment, the risk, the
+review, and the decision to ship.
+
+Vibe coding is a good way to explore. Agentic engineering is what starts when
+you want the work to be repeatable, reviewable, and safe enough to use in real
+systems.
+
+<style>{`
+  .agent-figure {
+    margin: 2rem 0;
+    padding: 1rem;
+    border: 1px solid var(--hairline);
+    background:
+      linear-gradient(var(--blueprint-wash) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-wash) 1px, transparent 1px),
+      var(--paper-deep);
+    background-size: 1rem 1rem;
+  }
+
+  .agent-figure figcaption {
+    margin-top: 0.9rem;
+    max-width: 34rem;
+    color: var(--taupe);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .flow-strip {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .flow-strip span,
+  .agent-map span,
+  .agent-map strong,
+  .context-funnel > * {
+    display: grid;
+    min-height: 3rem;
+    place-items: center;
+    border: 1px solid var(--hairline-strong);
+    background: rgba(245, 243, 236, 0.82);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.25;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  .flow-strip span + span {
+    position: relative;
+  }
+
+  .flow-strip span + span::before {
+    content: '>';
+    position: absolute;
+    left: -0.48rem;
+    color: var(--blueprint);
+  }
+
+  .context-funnel {
+    display: grid;
+    gap: 0.45rem;
+    justify-items: center;
+  }
+
+  .context-funnel > *:nth-child(1) { width: 100%; }
+  .context-funnel > *:nth-child(2) { width: 86%; }
+  .context-funnel > *:nth-child(3) { width: 72%; }
+  .context-funnel > *:nth-child(4) { width: 58%; }
+  .context-funnel > *:nth-child(5) {
+    width: 44%;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .agent-map {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .agent-map strong {
+    grid-column: 1 / -1;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .agent-map span {
+    min-height: 4rem;
+  }
+
+  @media (max-width: 42rem) {
+    .flow-strip,
+    .agent-map {
+      grid-template-columns: 1fr;
+    }
+
+    .flow-strip span + span::before {
+      content: '';
+      left: 50%;
+      top: -0.55rem;
+      width: 1px;
+      height: 0.55rem;
+      background: var(--blueprint);
+    }
+
+    .context-funnel > * {
+      width: 100% !important;
+    }
+  }
+`}</style>

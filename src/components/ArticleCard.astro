@@ -1,5 +1,6 @@
 ---
 import FormattedDate from './FormattedDate.astro';
+import { withBase } from '../consts';
 
 interface Props {
   href: string;
@@ -16,7 +17,7 @@ const num = index !== undefined ? String(index + 1).padStart(2, '0') : undefined
 ---
 
 <article class="card">
-  <a href={href} class="card-link">
+  <a href={withBase(href)} class="card-link">
     {num && <span class="card-num mono" aria-hidden="true">{num}</span>}
     <div class="card-body">
       <div class="card-meta mono">

@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
-import { SITE } from '../consts';
+import { SITE, withBase } from '../consts';
 
 export async function GET(context) {
   const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
@@ -16,7 +16,7 @@ export async function GET(context) {
       description: article.data.description,
       pubDate: article.data.pubDate,
       categories: article.data.tags,
-      link: `/articles/${article.id.replace(/^\d{4}-\d{2}-\d{2}_/, '')}/`,
+      link: withBase(`/articles/${article.id.replace(/^\d{4}-\d{2}-\d{2}_/, '')}/`),
     })),
     customData: `<language>en-us</language>`,
   });
