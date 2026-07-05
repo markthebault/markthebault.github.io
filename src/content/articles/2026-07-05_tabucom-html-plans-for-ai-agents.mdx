@@ -1,0 +1,207 @@
+---
+title: 'Tabucom: HTML Plans for AI Agents'
+description: 'A small open source tool for publishing Markdown, HTML, and static front-ends from AI agent workflows.'
+pubDate: 2026-07-05
+tags: ['agentic-ai', 'tools', 'frontend', 'open-source']
+---
+
+I built Tabucom for a very simple reason: I wanted AI agents to share work in a
+format people would actually read.
+
+Markdown is good for a lot of things. It is quick, portable, and easy for an
+agent to write. But when the output is a plan, a product spec, a roadmap, or a
+technical proposal, Markdown often becomes a wall of text. The structure is
+there, but the signal is not always visible.
+
+HTML changes that. A plan can have sections, diagrams, tables, callouts, status
+markers, screenshots, and lightweight interaction. It can feel closer to a small
+internal product than a text file. For many ideas, that is the difference
+between "I skimmed it" and "I understood it."
+
+Tabucom is a small open source service for publishing that kind of work. An AI
+agent can send Markdown, a single HTML file, or a prebuilt static site ZIP, and
+Tabucom returns a URL. The deployment is immutable and expires automatically.
+
+That is the whole point: remove the ceremony between an agent producing a useful
+front-end and a human being able to open it.
+
+<figure className="tabucom-figure">
+  <div className="publish-flow" aria-label="Tabucom publishing flow">
+    <span>Agent</span>
+    <span>Markdown</span>
+    <span>HTML spec</span>
+    <span>Static app</span>
+    <strong>Shareable URL</strong>
+  </div>
+  <figcaption>Tabucom gives agents a direct path from generated front-end work to something colleagues can open.</figcaption>
+</figure>
+
+## Why HTML plans
+
+I started thinking about this around plans.
+
+When an agent writes a plan in Markdown, the content can be correct and still be
+hard to consume. You get headings, bullets, and code blocks. That is fine for a
+developer who already knows the context. It is less fine when you want to share
+the plan with a product person, a manager, a designer, or another team.
+
+An HTML plan can make the shape of the work obvious:
+
+- what is in scope
+- what is not in scope
+- which systems are touched
+- what decisions are still open
+- what risks matter
+- what the sequence of work looks like
+
+The content does not need to be fancy. It just needs enough layout and visual
+hierarchy to make the important parts easy to find.
+
+This also works for specs. Instead of asking an agent for a long document, I can
+ask it for a small single-page spec with a few states, examples, diagrams, and
+implementation notes. Then I can share the URL and get feedback.
+
+## Faster feedback
+
+The interesting part is not hosting. Hosting static files is not new.
+
+The interesting part is making publishing cheap enough that it becomes part of
+the agent workflow. An agent should be able to produce something, publish it,
+and hand back a URL without opening a ticket, asking for an account, or setting
+up a project.
+
+That matters for prototypes. If I want to explore a small UI idea, the agent can
+create a single HTML page or a tiny React app, publish it, and send it to the
+people who need to react to it. The discussion moves from "imagine this screen"
+to "open this and tell me what is wrong."
+
+It also matters for internal communication. Roadmaps, implementation plans,
+architecture proposals, migration dashboards, release notes, and workshop
+material can all be richer than Markdown without becoming full applications.
+
+## What Tabucom does
+
+Tabucom keeps the model deliberately small:
+
+- publish Markdown, HTML, or a prebuilt static site ZIP
+- return an immutable URL
+- expire deployments automatically
+- support SPA fallback when a small front-end needs client-side routing
+- run as one small container with local or S3-compatible storage
+- expose API documentation and agent-discovery endpoints
+
+It is meant for trusted internal environments. It serves uploaded files; it does
+not build or execute them server-side. If you want isolation for previews, you
+can configure wildcard preview domains and put it behind the ingress, VPN, or
+SSO layer you already trust.
+
+That boundary is important. Tabucom is not trying to be a full deployment
+platform. It is a narrow tool for temporary front-end publishing.
+
+## The workflow I want
+
+The workflow I care about looks like this:
+
+```text
+idea -> agent creates plan.html -> Tabucom publishes it -> colleagues review it
+```
+
+Or:
+
+```text
+spec -> agent creates a small interactive prototype -> Tabucom shares the URL
+```
+
+Or:
+
+```text
+roadmap notes -> agent turns them into an HTML presentation -> team discusses it
+```
+
+That is where AI agents become more useful. Not only writing code, but preparing
+work in a format that helps people make decisions faster.
+
+Tabucom is a small piece of infrastructure for that. It gives agents somewhere
+simple to put the front-ends they create, and it gives teams a better artifact
+than another Markdown file in a chat thread.
+
+The project is open source here:
+[github.com/markthebault/tabucom](https://github.com/markthebault/tabucom).
+
+<style>{`
+  .tabucom-figure {
+    margin: 2rem 0;
+    padding: 1rem;
+    border: 1px solid var(--hairline);
+    background:
+      linear-gradient(var(--blueprint-wash) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blueprint-wash) 1px, transparent 1px),
+      var(--paper-deep);
+    background-size: 1rem 1rem;
+  }
+
+  .tabucom-figure figcaption {
+    margin-top: 0.9rem;
+    max-width: 34rem;
+    color: var(--taupe);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .publish-flow {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .publish-flow span,
+  .publish-flow strong {
+    display: grid;
+    min-height: 3.4rem;
+    place-items: center;
+    border: 1px solid var(--hairline-strong);
+    background: rgba(245, 243, 236, 0.86);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  .publish-flow strong {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .publish-flow span + span,
+  .publish-flow strong {
+    position: relative;
+  }
+
+  .publish-flow span + span::before,
+  .publish-flow strong::before {
+    content: '>';
+    position: absolute;
+    left: -0.48rem;
+    color: var(--blueprint);
+    font-weight: 400;
+  }
+
+  @media (max-width: 42rem) {
+    .publish-flow {
+      grid-template-columns: 1fr;
+    }
+
+    .publish-flow span + span::before,
+    .publish-flow strong::before {
+      content: '';
+      left: 50%;
+      top: -0.55rem;
+      width: 1px;
+      height: 0.55rem;
+      background: var(--blueprint);
+    }
+  }
+`}</style>
