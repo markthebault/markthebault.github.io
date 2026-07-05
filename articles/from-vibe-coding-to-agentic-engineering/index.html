@@ -1,0 +1,382 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-37fxchfa> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://www.mark-thebault.pro/articles/from-vibe-coding-to-agentic-engineering/"><title>From Vibe Coding to Agentic Engineering — Mark Thebault</title><meta name="title" content="From Vibe Coding to Agentic Engineering — Mark Thebault"><meta name="description" content="A practical guide to moving from casual AI-assisted coding to structured, verifiable agent workflows built on context, specs, skills, and domain knowledge."><meta name="author" content="Mark Thebault"><meta name="robots" content="index, follow"><meta name="googlebot" content="index, follow"><!-- Open Graph --><meta property="og:type" content="article"><meta property="og:url" content="https://www.mark-thebault.pro/articles/from-vibe-coding-to-agentic-engineering/"><meta property="og:title" content="From Vibe Coding to Agentic Engineering — Mark Thebault"><meta property="og:description" content="A practical guide to moving from casual AI-assisted coding to structured, verifiable agent workflows built on context, specs, skills, and domain knowledge."><meta property="og:image" content="https://www.mark-thebault.pro/og-default.svg"><meta property="og:site_name" content="Mark Thebault"><meta property="og:locale" content="en_US"><!-- Twitter --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="From Vibe Coding to Agentic Engineering — Mark Thebault"><meta name="twitter:description" content="A practical guide to moving from casual AI-assisted coding to structured, verifiable agent workflows built on context, specs, skills, and domain knowledge."><meta name="twitter:image" content="https://www.mark-thebault.pro/og-default.svg"><meta name="twitter:site" content="@MarkThebault"><meta name="twitter:creator" content="@MarkThebault"><!-- Theme --><meta name="theme-color" content="#f5f3ec"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Mark Thebault" href="https://www.mark-thebault.pro/rss.xml"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"From Vibe Coding to Agentic Engineering","description":"A practical guide to moving from casual AI-assisted coding to structured, verifiable agent workflows built on context, specs, skills, and domain knowledge.","datePublished":"2026-07-04T00:00:00.000Z","author":{"@type":"Person","name":"Mark Thebault","url":"https://www.mark-thebault.pro","sameAs":["https://github.com/markthebault","https://www.linkedin.com/in/mark-thebault","https://x.com/MarkThebault"]},"publisher":{"@type":"Person","name":"Mark Thebault","url":"https://www.mark-thebault.pro"},"mainEntityOfPage":"https://www.mark-thebault.pro/articles/from-vibe-coding-to-agentic-engineering/","url":"https://www.mark-thebault.pro/articles/from-vibe-coding-to-agentic-engineering/","keywords":["agentic-ai","engineering","llm","workflow"],"inLanguage":"en"}</script><!-- Fonts: Fraunces (display), IBM Plex Sans (body), IBM Plex Mono (utility) --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/_slug_.X1vGZYpY.css">
+<style>.article[data-astro-cid-zm77yjld]{padding-top:2.5rem;max-width:50rem}.back[data-astro-cid-zm77yjld]{color:var(--taupe);font-size:.78rem;display:inline-block}.back[data-astro-cid-zm77yjld]:hover{color:var(--blueprint)}.art-head[data-astro-cid-zm77yjld]{margin-top:2.5rem}.art-meta[data-astro-cid-zm77yjld]{color:var(--taupe);font-size:.74rem;display:flex;gap:.5rem;align-items:center}.art-title[data-astro-cid-zm77yjld]{font-size:var(--step-3);margin-top:1rem;max-width:22ch}.art-desc[data-astro-cid-zm77yjld]{margin-top:1.2rem;font-size:var(--step-1);color:var(--ink-soft);font-family:var(--font-display);font-style:italic;max-width:52ch}.art-tags[data-astro-cid-zm77yjld]{list-style:none;display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}.art-tags[data-astro-cid-zm77yjld] li[data-astro-cid-zm77yjld]{font-size:.68rem;color:var(--taupe);border:1px solid var(--hairline);padding:.15rem .55rem;letter-spacing:.04em}.updated[data-astro-cid-zm77yjld]{margin-top:1rem;color:var(--taupe);font-size:.72rem}.art-rule[data-astro-cid-zm77yjld]{margin-block:2.5rem}.art-foot[data-astro-cid-zm77yjld]{margin-top:4rem}.art-foot[data-astro-cid-zm77yjld] .back[data-astro-cid-zm77yjld]{margin-top:2rem}
+</style></head> <body data-astro-cid-37fxchfa> <a href="#main" class="skip" data-astro-cid-37fxchfa>Skip to content</a> <header class="site-header" data-astro-cid-3ef6ksr2> <div class="wrap bar" data-astro-cid-3ef6ksr2> <a href="/" class="brand" aria-label="Mark Thebault — home" data-astro-cid-3ef6ksr2> <span class="brand-mark mono" data-astro-cid-3ef6ksr2>MT</span> <span class="brand-name" data-astro-cid-3ef6ksr2>Mark Thebault</span> </a> <nav aria-label="Primary" data-astro-cid-3ef6ksr2> <ul class="nav" data-astro-cid-3ef6ksr2> <li data-astro-cid-3ef6ksr2> <a href="/articles/" class="nav-link active" aria-current="page" data-astro-cid-3ef6ksr2> Writing </a> </li><li data-astro-cid-3ef6ksr2> <a href="/work/" class="nav-link" data-astro-cid-3ef6ksr2> Work </a> </li><li data-astro-cid-3ef6ksr2> <a href="/about/" class="nav-link" data-astro-cid-3ef6ksr2> About </a> </li> </ul> </nav> </div> </header>  <main id="main" data-astro-cid-37fxchfa>  <article class="wrap article" data-astro-cid-zm77yjld> <a href="/articles/" class="back mono" data-astro-cid-zm77yjld>← All writing</a> <header class="art-head" data-astro-cid-zm77yjld> <div class="art-meta mono" data-astro-cid-zm77yjld> <time datetime="2026-07-04T00:00:00.000Z" class="mono">Jul 4, 2026</time> <span class="dot" data-astro-cid-zm77yjld>·</span> <span data-astro-cid-zm77yjld>13 min read</span> </div> <h1 class="art-title" data-astro-cid-zm77yjld>From Vibe Coding to Agentic Engineering</h1> <p class="art-desc" data-astro-cid-zm77yjld>A practical guide to moving from casual AI-assisted coding to structured, verifiable agent workflows built on context, specs, skills, and domain knowledge.</p> <ul class="art-tags" data-astro-cid-zm77yjld> <li class="mono" data-astro-cid-zm77yjld>agentic-ai</li><li class="mono" data-astro-cid-zm77yjld>engineering</li><li class="mono" data-astro-cid-zm77yjld>llm</li><li class="mono" data-astro-cid-zm77yjld>workflow</li> </ul>  </header> <hr class="rule art-rule" data-astro-cid-zm77yjld> <div class="prose" data-astro-cid-zm77yjld>  <p>The first time an agent feels magical is usually not the dangerous moment. The
+dangerous moment is the third or fourth task, when it has already fixed a bug,
+written a test, followed a pattern in the repo, and you start treating it like it
+understands the product.</p>
+<p>Then you ask for something slightly underspecified.</p>
+<p>It edits the right files for the wrong reason. Or it keeps an obsolete decision
+from earlier in the chat. Or it reads a wall of logs, latches onto the least
+important part, and confidently “fixes” the symptom. The output is clean enough
+that it looks intentional, but the work is still pointed at the wrong target.</p>
+<p>That is the limit I keep coming back to: models do what you ask, not necessarily
+what you meant.</p>
+<p>I find it more useful to treat an agent like a very fast new engineer who has
+not joined the company yet. It can read, edit, test, explain, and search faster
+than I can. It does not know which tradeoffs are sacred, which docs are stale,
+which integration is fragile, or which requirement was deliberately left out.</p>
+<p>The job changes from “can I write this code?” to “can I create the conditions
+where delegating this work is likely to succeed?”</p>
+<figure class="agent-figure"><div class="flow-strip" aria-label="Progression from vibe coding to agentic engineering"><span>Prompt</span><span>Context</span><span>Plan</span><span>Tools</span><span>Verify</span></div><figcaption>Agentic engineering turns a single prompt into a controlled workflow.</figcaption></figure>
+<p>Vibe coding is great for exploration. I use it when the cost of being wrong is
+low and the point is to discover what shape a solution could have.</p>
+<p>Production work needs a different posture. Agentic engineering, at least the way
+I think about it, is the discipline of making agent work boring enough to trust:
+small context, explicit constraints, scoped tools, repeatable workflows, and
+verification after each step.</p>
+<h2 id="context-engineering">Context engineering</h2>
+<p>The most common mistake I see is trying to solve agent reliability by dumping
+more information into the chat.</p>
+<p>That feels reasonable. If the model missed something, give it more context.
+Attach more docs. Keep the whole conversation. Enable every connector. Paste the
+whole failing log.</p>
+<p>Sometimes that helps. Often it just gives the model more ways to be distracted.</p>
+<p>Context engineering is the practice of deciding what the model sees, when it
+sees it, and in what order. The goal is not maximum context. The goal is the
+smallest complete context that lets the agent do the job.</p>
+<figure class="agent-figure"><div class="context-funnel" aria-label="Context funnel"><div>Company docs</div><div>Repository map</div><div>Relevant files</div><div>Task constraints</div><strong>Agent context</strong></div><figcaption>More context is not always better. The useful context is selected, ordered, and current.</figcaption></figure>
+<p>Everything you give the model can influence the answer. Relevant information
+helps. Irrelevant information competes. Old requirements, stale files, repeated
+logs, unused tool definitions, and half-remembered decisions from earlier in a
+session all become part of the soup.</p>
+<p>Large context windows are useful, but they do not remove the need for judgment.
+A clean 20,000-token session often beats a 150,000-token session full of old
+discussion, noisy logs, and unrelated files.</p>
+<p>The practical rule is simple:</p>
+<blockquote>
+<p>Give the model everything it needs, but nothing that only makes the session noisy.</p>
+</blockquote>
+<h2 id="habits-that-changed-my-results">Habits that changed my results</h2>
+<p>The biggest improvements have been small and unglamorous.</p>
+<p>Start new sessions for new tasks. A long conversation accumulates assumptions,
+decisions, dead ends, and outdated instructions. When the task changes, a fresh
+session with a short summary is often better than dragging the whole history
+forward.</p>
+<p>Use sub-agents for specialized work. A main agent does not need every tool,
+every document, and every workflow in its own context. A specialized sub-agent
+can handle one bounded task with only the tools and instructions it needs.</p>
+<p>Keep repository summaries available. A short, accurate summary of the repository
+structure, commands, architectural conventions, and ownership boundaries can
+save the model from repeatedly scanning the whole codebase.</p>
+<p>Prefer focused file reads over broad ingestion. Ask the agent to inspect the
+files directly related to the task, then expand only when necessary.</p>
+<p>Summarize long outputs before continuing. Logs, test failures, and command
+outputs should be reduced to the important evidence: the failing command, the
+error, the stack trace, the changed files, and the likely affected area.</p>
+<h2 id="minimal-project-instructions">Minimal project instructions</h2>
+<p>Project instruction files such as <code>AGENTS.md</code>, <code>CLAUDE.md</code>, or similar guidance
+files are easy to overfill. I have done it. The file starts as a helpful map,
+then slowly turns into a motivational poster with commands attached.</p>
+<p>There is no need to explain that a repository is TypeScript, Python, .NET, Java,
+or another common stack if the model can infer that from the files. There is
+also no need to include generic advice such as “write clean code” or “follow
+best practices.” Modern models already know those words, and they are too vague
+to be useful.</p>
+<p>What the model does not know is your local reality:</p>
+<ul>
+<li>how the codebase is organized</li>
+<li>which commands validate the work</li>
+<li>which directories are generated and should not be edited</li>
+<li>which architectural boundaries must not be crossed</li>
+<li>which internal APIs or patterns are preferred</li>
+<li>which files contain source-of-truth business rules</li>
+<li>what to do before and after each task</li>
+</ul>
+<p>A good instruction file is a map, not a software engineering textbook.</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="md"><code><span class="line"><span style="color:#005CC5;font-weight:bold"># Agent Instructions</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E36209">-</span><span style="color:#24292E"> API route handlers live in </span><span style="color:#005CC5">`src/server/routes`</span><span style="color:#24292E">.</span></span>
+<span class="line"><span style="color:#E36209">-</span><span style="color:#24292E"> Business logic belongs in </span><span style="color:#005CC5">`src/domain`</span><span style="color:#24292E">.</span></span>
+<span class="line"><span style="color:#E36209">-</span><span style="color:#24292E"> Do not query the database directly from route handlers.</span></span>
+<span class="line"><span style="color:#E36209">-</span><span style="color:#24292E"> Shared UI components live in </span><span style="color:#005CC5">`src/components/common`</span><span style="color:#24292E">.</span></span>
+<span class="line"><span style="color:#E36209">-</span><span style="color:#24292E"> For focused validation, run </span><span style="color:#005CC5">`npm run test -- &lt;package&gt;`</span><span style="color:#24292E">.</span></span>
+<span class="line"><span style="color:#E36209">-</span><span style="color:#24292E"> Before changing a public API, update the related contract tests.</span></span></code></pre>
+<p>This kind of file gives the agent information it cannot reliably guess.</p>
+<h2 id="disable-tools-when-they-are-not-needed">Disable tools when they are not needed</h2>
+<p>Tools are also context.</p>
+<p>Every enabled connector, MCP server, and tool description gives the model another
+possible action. That is powerful when the task needs it. It is noise when the
+task does not.</p>
+<p>If a task is purely local code editing, the agent may not need access to Jira,
+Slack, Confluence, GitHub, cloud dashboards, or deployment systems. Keeping
+those tools enabled by default can make the main agent heavier and less focused.</p>
+<p>Disable tools that are not required for the task. When possible, give agents the
+smallest set of tools that can complete the work.</p>
+<p>Another option is to use specialized sub-agents. For example, the main coding
+agent can stay lightweight, while a documentation sub-agent has access to
+Confluence, or a delivery sub-agent has access to CI/CD tools. The main agent
+calls the specialist only when that information is needed.</p>
+<h2 id="keep-the-conversation-lean">Keep the conversation lean</h2>
+<p>I have become much more willing to be blunt with agents.</p>
+<p>Not rude. Just compact.</p>
+<p>Normal:</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text"><code><span class="line"><span>The issue is likely caused by the authentication middleware checking token</span></span>
+<span class="line"><span>expiration incorrectly. I recommend updating the comparison operator and then</span></span>
+<span class="line"><span>running the related tests.</span></span></code></pre>
+<p>Compressed:</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text"><code><span class="line"><span>Bug in auth middleware. Token expiry check wrong. Fix comparison. Run auth tests.</span></span></code></pre>
+<p>The important rule is that technical information must stay exact. Code,
+commands, API names, and error messages should not be damaged by compression.
+When safety or clarity matters, switch back to normal language.</p>
+<p>The same applies to command output. A 2,000-line test failure is rarely 2,000
+lines of signal. Keep the failing command, the first useful error, the affected
+files, and the stack frame that actually points somewhere.</p>
+<h2 id="use-sub-agents-to-avoid-the-god-agent">Use sub-agents to avoid the God Agent</h2>
+<p>The “God Agent” is tempting: one agent, every tool, every instruction, every
+document, every responsibility.</p>
+<p>It works surprisingly well until it does not. Then it is hard to debug because
+you do not know whether the failure came from the task prompt, the tool list,
+the retrieval result, the stale conversation history, or the model simply making
+a bad call.</p>
+<p>Sub-agents split work into specialized modules. Each one has a narrow
+responsibility, a small context, and the minimum tools needed for the job.</p>
+<figure class="agent-figure wide"><div class="agent-map" aria-label="Sub-agent map"><strong>Main agent</strong><span>Code agent</span><span>Docs agent</span><span>CI agent</span><span>Security agent</span><span>Release agent</span></div><figcaption>The main agent should route work. It should not carry every tool and every document all the time.</figcaption></figure>
+<p>Use sub-agents when a task naturally separates into different kinds of work:</p>
+<ul>
+<li>code implementation</li>
+<li>test generation</li>
+<li>documentation lookup</li>
+<li>CI/CD investigation</li>
+<li>security review</li>
+<li>database migration review</li>
+<li>product requirement clarification</li>
+<li>release note generation</li>
+</ul>
+<p>A simple pattern is to use a lightweight router agent. The router reads the user
+request, identifies the type of work, and delegates it to the right specialist.</p>
+<p>I do not think every team needs a complicated multi-agent system. For many
+workflows, the useful version is modest:</p>
+<ul>
+<li>a code agent edits files and runs local validation</li>
+<li>a docs agent retrieves source-of-truth context</li>
+<li>a CI agent reads pipeline logs and extracts the real failure</li>
+<li>a security agent reviews risky diffs against known rules</li>
+</ul>
+<p>Each specialist should receive only the tools, instructions, and history needed
+for that job. That is the whole trick.</p>
+<h2 id="plan-the-work">Plan the work</h2>
+<p>Most bad AI coding outcomes are not caused by weak syntax generation. They are
+caused by weak task definition. The agent was asked to “build the feature”
+without a precise definition of the feature, the constraints, the affected
+files, the expected behavior, or the verification path.</p>
+<p>Planning gives the model a smaller target. It also gives you something to
+disagree with before code changes start.</p>
+<p>For small tasks, a few bullets are enough: problem, desired behavior, files that
+probably matter, constraints, tests to run. For larger work, write a real spec.</p>
+<h2 id="spec-driven-development">Spec-driven development</h2>
+<p>Spec-driven development sounds heavier than it needs to be. In practice, it can
+be a short document that answers the questions the agent would otherwise guess.</p>
+<p>What is broken? What should change? What should not change? Which modules are in
+scope? How will we know the work is done?</p>
+<p>The practical workflow:</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="text"><code><span class="line"><span>idea -&gt; plan.md -&gt; todo.md -&gt; implementation -&gt; tests -&gt; review</span></span></code></pre>
+<p><code>plan.md</code> explains what should be built and why.</p>
+<p><code>todo.md</code> breaks the plan into small implementation steps.</p>
+<p>The agent works through the todo list one item at a time, updating the status as
+it goes. This is slower than one-shot prompting, but it is much easier to review.</p>
+<h2 id="agentic-knowledge">Agentic knowledge</h2>
+<p>The hard part is not only technical knowledge. Agents also need organizational
+and business knowledge.</p>
+<p>They need to know which service owns a concept, which integration is fragile,
+which compliance rule constrains a field, which document is still authoritative,
+and which one everyone ignores. Without that, they guess.</p>
+<h2 id="skills-make-workflows-repeatable">Skills make workflows repeatable</h2>
+<p>Skills are useful when you notice yourself typing the same instruction for the
+fifth time.</p>
+<p>Instead of relying on memory, package the workflow: when to use it, what files to
+inspect, which tools to call, what output format to produce, and how to verify
+the result.</p>
+<p>Examples:</p>
+<ul>
+<li>how to create a pull request in your organization</li>
+<li>how to interact with Jira</li>
+<li>how to investigate a failing pipeline</li>
+<li>how to generate release notes</li>
+<li>how to update API documentation</li>
+<li>how to review code against team standards</li>
+<li>how to create a new module in a specific repository</li>
+</ul>
+<p>I would not start by writing a library of generic skills. Do the work manually
+with an agent a few times first. Notice where it misunderstands you. Notice which
+examples help. Then turn that repeated pattern into a skill.</p>
+<h2 id="business-knowledge-is-part-of-engineering">Business knowledge is part of engineering</h2>
+<p>Technical instructions are not enough. Many implementation choices depend on
+business knowledge:</p>
+<ul>
+<li>customer types</li>
+<li>pricing rules</li>
+<li>compliance requirements</li>
+<li>domain vocabulary</li>
+<li>product behavior</li>
+<li>support policies</li>
+<li>operational constraints</li>
+<li>legal or security requirements</li>
+<li>internal ownership boundaries</li>
+</ul>
+<p>If this knowledge is not available, the agent will make up a reasonable-looking
+version of reality. That is worse than an obvious failure.</p>
+<p>The simplest approach is to keep specific documentation in the repository or in
+a connected documentation repository:</p>
+<ul>
+<li><code>docs/domain.md</code></li>
+<li><code>docs/architecture.md</code></li>
+<li><code>docs/testing.md</code></li>
+<li><code>docs/release-process.md</code></li>
+<li><code>docs/business-rules.md</code></li>
+<li><code>docs/api-contracts.md</code></li>
+</ul>
+<p>This works well when the knowledge is stable and not too large.</p>
+<p>Good documentation for agents is not necessarily long. It has short sections,
+concrete examples, source-of-truth statements, clear ownership, links to related
+files, update dates when relevant, and explicit “do” and “do not” rules.</p>
+<p>For complex domains, I prefer a domain knowledge sub-agent. Its job is not to
+write code. Its job is to retrieve, filter, and explain domain knowledge for the
+coding agent.</p>
+<p>The main agent asks focused questions:</p>
+<ul>
+<li>“What is the source-of-truth rule for refund eligibility?”</li>
+<li>“Which document defines the onboarding flow?”</li>
+<li>“What are the compliance constraints for storing this field?”</li>
+<li>“Which service owns this business concept?”</li>
+</ul>
+<p>The domain sub-agent returns a concise answer with sources. The coding agent
+then uses that answer as context for implementation.</p>
+<h2 id="knowledge-wikis">Knowledge wikis</h2>
+<p>One pattern I like is a small knowledge wiki for agents. Not a replacement for
+full documentation. More like an orientation layer: enough for the agent to know
+where to look and what matters.</p>
+<p>A useful agent knowledge wiki might contain:</p>
+<ul>
+<li>repository overview</li>
+<li>architecture map</li>
+<li>key business concepts</li>
+<li>service ownership</li>
+<li>common workflows</li>
+<li>testing strategy</li>
+<li>deployment model</li>
+<li>important decisions</li>
+<li>glossary</li>
+<li>known pitfalls</li>
+</ul>
+<p>The most important page is often the one called something boring like
+<code>known-pitfalls.md</code>. That is where the real local knowledge tends to live.</p>
+<h2 id="from-vibe-coding-to-engineering-discipline">From vibe coding to engineering discipline</h2>
+<p>Vibe coding is useful for exploration. It helps you move fast, prototype, and
+discover possibilities. But it becomes dangerous when it is used as the default
+mode for production engineering.</p>
+<p>The line I try to keep clear is ownership.</p>
+<p>The model can generate code, inspect a repo, and run the checks. The engineer
+still owns the outcome: the product judgment, the risk, the review, and the
+decision to ship.</p>
+<p>That is the difference between using agents as a fun autocomplete and using them
+as part of an engineering system.</p>
+<style>
+.agent-figure {
+  margin: 2rem 0;
+  padding: 1rem;
+  border: 1px solid var(--hairline);
+  background:
+    linear-gradient(var(--blueprint-wash) 1px, transparent 1px),
+    linear-gradient(90deg, var(--blueprint-wash) 1px, transparent 1px),
+    var(--paper-deep);
+  background-size: 1rem 1rem;
+}
+
+.agent-figure figcaption {
+  margin-top: 0.9rem;
+  max-width: 34rem;
+  color: var(--taupe);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.flow-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.flow-strip span,
+.agent-map span,
+.agent-map strong,
+.context-funnel > * {
+  display: grid;
+  min-height: 3rem;
+  place-items: center;
+  border: 1px solid var(--hairline-strong);
+  background: rgba(245, 243, 236, 0.82);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.flow-strip span + span {
+  position: relative;
+}
+
+.flow-strip span + span::before {
+  content: '>';
+  position: absolute;
+  left: -0.48rem;
+  color: var(--blueprint);
+}
+
+.context-funnel {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: center;
+}
+
+.context-funnel > *:nth-child(1) { width: 100%; }
+.context-funnel > *:nth-child(2) { width: 86%; }
+.context-funnel > *:nth-child(3) { width: 72%; }
+.context-funnel > *:nth-child(4) { width: 58%; }
+.context-funnel > *:nth-child(5) {
+  width: 44%;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.agent-map {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.agent-map strong {
+  grid-column: 1 / -1;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.agent-map span {
+  min-height: 4rem;
+}
+
+@media (max-width: 42rem) {
+  .flow-strip,
+  .agent-map {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-strip span + span::before {
+    content: '';
+    left: 50%;
+    top: -0.55rem;
+    width: 1px;
+    height: 0.55rem;
+    background: var(--blueprint);
+  }
+
+  .context-funnel > * {
+    width: 100% !important;
+  }
+}
+</style>  </div> <footer class="art-foot" data-astro-cid-zm77yjld> <hr class="rule" data-astro-cid-zm77yjld> <a href="/articles/" class="back mono" data-astro-cid-zm77yjld>← Back to all writing</a> </footer> </article>  </main> <footer class="site-footer" data-astro-cid-sz7xmlte> <div class="wrap foot" data-astro-cid-sz7xmlte> <div class="foot-lead" data-astro-cid-sz7xmlte> <p class="eyebrow" data-astro-cid-sz7xmlte>Get in touch</p> <p class="foot-line" data-astro-cid-sz7xmlte>
+Building something at the edge of AI and platform engineering?
+<a href="mailto:hello@mark-thebault.pro" data-astro-cid-sz7xmlte>Let’s talk.</a> </p> </div> <ul class="foot-socials" data-astro-cid-sz7xmlte> <li data-astro-cid-sz7xmlte> <a href="https://github.com/markthebault" rel="me noopener" target="_blank" data-astro-cid-sz7xmlte> <span class="s-label" data-astro-cid-sz7xmlte>GitHub</span> <span class="s-handle mono" data-astro-cid-sz7xmlte>markthebault</span> </a> </li><li data-astro-cid-sz7xmlte> <a href="https://www.linkedin.com/in/mark-thebault" rel="me noopener" target="_blank" data-astro-cid-sz7xmlte> <span class="s-label" data-astro-cid-sz7xmlte>LinkedIn</span> <span class="s-handle mono" data-astro-cid-sz7xmlte>mark-thebault</span> </a> </li><li data-astro-cid-sz7xmlte> <a href="https://x.com/MarkThebault" rel="me noopener" target="_blank" data-astro-cid-sz7xmlte> <span class="s-label" data-astro-cid-sz7xmlte>X</span> <span class="s-handle mono" data-astro-cid-sz7xmlte>@MarkThebault</span> </a> </li><li data-astro-cid-sz7xmlte> <a href="mailto:markthebaultpro@gmail.com" rel="me noopener" data-astro-cid-sz7xmlte> <span class="s-label" data-astro-cid-sz7xmlte>Email</span> <span class="s-handle mono" data-astro-cid-sz7xmlte>markthebaultpro@gmail.com</span> </a> </li> </ul> </div> <div class="wrap foot-base" data-astro-cid-sz7xmlte> <span class="mono" data-astro-cid-sz7xmlte>© 2026 Mark Thebault</span> <span class="mono dim" data-astro-cid-sz7xmlte>MT—2025 · Built with Astro</span> </div> </footer>  </body></html> 
