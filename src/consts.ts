@@ -27,3 +27,14 @@ export const NAV = [
   { label: 'Work', href: '/work/' },
   { label: 'About', href: '/about/' },
 ] as const;
+
+export function withBase(path: string) {
+  if (!path.startsWith('/')) return path;
+
+  const base = import.meta.env.BASE_URL.endsWith('/')
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
+  const trimmedPath = path.replace(/^\/+/, '');
+
+  return trimmedPath ? `${base}${trimmedPath}` : base;
+}

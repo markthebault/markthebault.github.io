@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import { SITE, SOCIALS } from '../consts';
+import { SITE, SOCIALS, withBase } from '../consts';
 
 interface Props {
   title: string;
@@ -44,7 +44,7 @@ if (updatedDate) {
 
 <BaseLayout title={title} description={description} type="article" schema={schema}>
   <article class="wrap article">
-    <a href="/articles/" class="back mono">← All writing</a>
+    <a href={withBase('/articles/')} class="back mono">← All writing</a>
 
     <header class="art-head">
       <div class="art-meta mono">
@@ -80,7 +80,7 @@ if (updatedDate) {
 
     <footer class="art-foot">
       <hr class="rule" />
-      <a href="/articles/" class="back mono">← Back to all writing</a>
+      <a href={withBase('/articles/')} class="back mono">← Back to all writing</a>
     </footer>
   </article>
 </BaseLayout>

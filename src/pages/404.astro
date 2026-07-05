@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../consts';
 ---
 
 <BaseLayout title="Not found" description="This page could not be found." noindex={true}>
@@ -11,8 +12,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       you back to something real.
     </p>
     <div class="nf-cta">
-      <a href="/" class="btn">Return home</a>
-      <a href="/articles/" class="btn btn-ghost">Browse writing</a>
+      <a href={withBase('/')} class="btn">Return home</a>
+      <a href={withBase('/articles/')} class="btn btn-ghost">Browse writing</a>
     </div>
   </section>
 </BaseLayout>

@@ -4,9 +4,11 @@ import sitemap from '@astrojs/sitemap';
 
 // Custom domain (see public/CNAME). Update if the domain ever changes.
 const SITE = 'https://www.mark-thebault.pro';
+const BASE = process.env.ASTRO_BASE ?? '/';
 
 export default defineConfig({
   site: SITE,
+  base: BASE,
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {
