@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  deployments: write
   pages: read
   pull-requests: write
 
@@ -16,6 +17,9 @@ concurrency:
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
+    environment:
+      name: pr-preview-${{ github.event.pull_request.number }}
+      url: https://www.mark-thebault.pro/pr-preview/pr-${{ github.event.pull_request.number }}/
     # rossjrw/pr-preview-action v1 cannot safely deploy previews from forks.
     if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
@@ -39,6 +43,27 @@ jobs:
         env:
           ASTRO_BASE: /pr-preview/pr-${{ github.event.pull_request.number }}/
           ASTRO_NOINDEX: "true"
+
+      - name: Expose preview URL
+        if: github.event.action != 'closed'
+        run: |
+          set -euo pipefail
+
+          preview_url="https://www.mark-thebault.pro/pr-preview/pr-${{ github.event.pull_request.number }}/"
+          printf '%s\n' "$preview_url" > preview-url.txt
+          {
+            echo "## PR preview"
+            echo
+            echo "[Open preview]($preview_url)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload preview URL artifact
+        if: github.event.action != 'closed'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-preview-url-${{ github.event.pull_request.number }}
+          path: preview-url.txt
+          retention-days: 30
 
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
