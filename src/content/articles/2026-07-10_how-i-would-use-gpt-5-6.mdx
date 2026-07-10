@@ -1,0 +1,292 @@
+---
+title: 'How I Would Use GPT-5.6 Without Wasting Intelligence'
+description: 'My practical model-routing workflow: Sol for the main work, Fable 5 to challenge important plans, Interplan for human review, and Luna for focused sub-agents.'
+pubDate: 2026-07-10
+tags: ['gpt-5-6', 'agentic-ai', 'coding', 'workflow', 'interplan']
+---
+
+import { withBase } from '../../consts';
+
+OpenAI has released three GPT-5.6 models: Sol, Terra, and Luna. The official
+positioning is simple: Sol is the flagship, Terra is the balanced option, and
+Luna is the fast and affordable one.
+
+But after looking at the cost and intelligence results, I would use them a bit
+differently.
+
+For me, the interesting part is not choosing one default model. It is routing
+the work between two main models, then spending more intelligence only where it
+changes the result.
+
+<figure className="model-figure wide">
+  <a
+    href="https://artificialanalysis.ai/models?cost=intelligence-vs-cost-per-task"
+    target="_blank"
+    rel="noreferrer"
+  >
+    <img
+      src={withBase('/images/articles/gpt-5-6-intelligence-vs-cost.jpg')}
+      alt="Artificial Analysis chart comparing model intelligence with estimated cost per intelligence index task"
+      loading="eager"
+    />
+  </a>
+  <figcaption>
+    Intelligence versus estimated cost per task, captured from Artificial
+    Analysis on July 10, 2026. This is a useful routing signal, not a substitute
+    for testing models on your own work.
+  </figcaption>
+</figure>
+
+## My two main workhorses
+
+My default would be **GPT-5.6 Sol with low reasoning effort**.
+
+It sits in a very attractive place on the chart. It is already strong enough
+for normal coding, writing, research, and tool use without paying for a long
+reasoning process every time. If the task needs more care, I would move Sol to
+medium.
+
+Then I would use **GPT-5.6 Luna with low or medium effort** for focused
+sub-agent work: finding files, checking tests, summarizing documentation,
+researching one narrow question, or implementing a well-defined small task.
+
+That leaves a simple routing rule:
+
+```text
+Normal work             -> Sol low
+Work needing more care  -> Sol medium
+Narrow sub-agent task   -> Luna low or medium
+Hard reasoning and planning agent loops        -> Sol high, xhigh, or max
+Hard coding subtask     -> Sol low or medium as a sub-agent
+```
+
+OpenAI describes Terra as the balanced everyday model. I am not saying Terra is
+a bad model. But on this chart, I do not yet see a clear place for it in my own
+workflow. Sol-low gives me a better main workhorse (faster and cheaper), while Luna gives me the
+cheaper worker for narrower tasks.
+
+That may change after real use. A benchmark is one view of performance, and the
+right routing decision depends on the codebase, the tools, the prompt, and the
+cost of a mistake. I would still run a small evaluation on my own recurring
+tasks before locking this into an agent configuration.
+
+## Brainstorm between models before writing code
+
+The bigger opportunity is not the model picker. It is what happens before the
+first line of code.
+
+For an important change, I would not ask one model to make the plan and then
+immediately implement it. I would make two strong models challenge each other
+first.
+
+For example (Implemented as Agent Workflow):
+
+1. Ask GPT-5.6 Sol with xhigh or max effort to produce a complete implementation
+   plan.
+2. Give the plan and the same source context to Claude Fable 5 at medium or high
+   reasoning effort.
+3. Ask Fable to find missing requirements, weak assumptions, architecture
+   problems, unnecessary work, and risks.
+4. Return the critique to Sol and ask it to respond with concrete changes.
+5. Continue for a maximum of 3-10 turns, or stop earlier when both models agree
+   on one complete solution.
+
+<figure className="model-figure">
+  <div className="debate-flow" aria-label="Two-model planning and implementation workflow">
+    <span>Sol creates the plan</span>
+    <span>Fable challenges it</span>
+    <span>Maximum 10 turns</span>
+    <strong>Agreed solution</strong>
+  </div>
+  <figcaption>
+    Use model disagreement before implementation, while changing the plan is
+    still cheap.
+  </figcaption>
+</figure>
+
+The goal is not to let two models talk forever. The goal is convergence.
+
+I would give them an explicit agreement contract. The final plan must include:
+
+- the intended outcome and non-goals
+- the files and systems likely to change
+- the proposed architecture and important trade-offs
+- implementation steps in dependency order
+- validation, tests, and rollback
+- open questions that still require a human decision
+
+If they still disagree after ten turns, the unresolved points should be shown
+to me. That is more useful than forcing a fake consensus.
+
+Fable 5 is expensive on the chart, so I would not use it as the everyday coding
+model. I would use it selectively as a second brain. Paying for one strong
+challenge before a large implementation can be much cheaper than discovering a
+bad assumption after the code is written.
+
+## Put the human review between planning and execution
+
+Once the models agree, I still want to review the result.
+
+This is why I created
+[Interplan](https://github.com/markthebault/interplan). It lets an agent turn a
+plan into a standalone HTML artifact, open it locally in the browser, and wait
+for visual annotations and comments. I can click on a section, explain what is
+wrong, and send the feedback back to the agent. The HTML reloads as the agent
+updates it.
+
+The workflow becomes:
+
+```text
+Sol plan
+  -> Fable challenge
+  -> model agreement
+  -> human review in Interplan
+  -> refined plan
+  -> implementation
+```
+
+This step matters because the models can agree with each other and still agree
+on the wrong product decision. They share a lot of public knowledge. They do
+not automatically share the context in my head.
+
+Interplan gives me a clean point to change the scope, reject an assumption, add
+a constraint, or rewrite part of the plan before multiple agents start editing
+the repository.
+
+## Split execution by required intelligence
+
+After the plan is accepted, I would split the work into tasks that can be done
+independently. Then I would choose a model for each task based on the
+intelligence it requires.
+
+Luna-low can handle mechanical and well-specified tasks. Luna-medium can take
+work that needs more local reasoning. Sol-low is available when a coding task is
+small in scope but technically difficult. The main Sol agent keeps the plan,
+coordinates dependencies, reviews results, and runs the final verification.
+
+<figure className="model-figure wide">
+  <div className="agent-routing" aria-label="Model routing across sub-agents">
+    <strong>Main agent<br />Sol medium or high</strong>
+    <span>Luna low<br />mechanical work</span>
+    <span>Luna medium<br />focused reasoning</span>
+    <span>Sol low<br />hard coding task</span>
+    <span>Sol high+<br />critical review</span>
+  </div>
+  <figcaption>
+    Match model effort to the task. Do not run every sub-agent at maximum
+    intelligence by default.
+  </figcaption>
+</figure>
+
+The main agent should not delegate vague goals such as "build the backend." It
+should delegate bounded tasks with the relevant files, constraints, expected
+output, and verification command. Cheaper models become much more useful when
+the planning work has already removed ambiguity.
+
+OpenAI also provides max reasoning for Sol and an ultra mode that uses
+sub-agents. Those modes make sense when the task really benefits from more
+search, more parallel work, or a deeper final check. They should be an
+escalation path, not the starting point for every prompt.
+
+## The practical workflow
+
+So my first GPT-5.6 setup would be:
+
+```text
+1. Start with Sol-low for most work.
+2. Move to Sol-medium when the task needs more judgment.
+3. For an important plan, use Sol xhigh/max and ask Fable 5 to challenge it.
+4. Stop the debate after agreement or a maximum of ten turns.
+5. Review the resulting HTML plan myself with Interplan.
+6. Delegate bounded tasks to Luna-low or Luna-medium.
+7. Use Sol sub-agents only for the difficult coding parts.
+8. Let the main Sol agent integrate, test, and review the complete result.
+```
+
+The new models make intelligence cheaper, but cheap intelligence can still be
+wasted. The real gain comes from using strong reasoning to remove ambiguity,
+human judgment to correct the direction, and smaller models to execute the
+parts that are already clear.
+
+That is the workflow I want to test: not one model doing everything, but a small
+system where each model is used at the point where it gives the most value.
+
+Sources: [OpenAI GPT-5.6 announcement](https://openai.com/index/gpt-5-6/),
+[Artificial Analysis model comparison](https://artificialanalysis.ai/models?cost=intelligence-vs-cost-per-task),
+and [Interplan on GitHub](https://github.com/markthebault/interplan).
+
+<style>{`
+  .model-figure {
+    margin: 2rem 0;
+    padding: 1rem;
+    border: 1px solid var(--hairline);
+    background: var(--paper-deep);
+  }
+
+  .model-figure.wide {
+    margin-inline: clamp(-4rem, -6vw, 0rem);
+  }
+
+  .model-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline-strong);
+  }
+
+  .model-figure figcaption {
+    margin-top: 0.9rem;
+    color: var(--taupe);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .debate-flow,
+  .agent-routing {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .debate-flow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .agent-routing {
+    grid-template-columns: 1.2fr repeat(4, minmax(0, 1fr));
+  }
+
+  .debate-flow span,
+  .debate-flow strong,
+  .agent-routing span,
+  .agent-routing strong {
+    display: grid;
+    min-height: 4.5rem;
+    place-items: center;
+    padding: 0.7rem;
+    border: 1px solid var(--hairline-strong);
+    background: rgba(245, 243, 236, 0.9);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .debate-flow strong,
+  .agent-routing strong {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  @media (max-width: 48rem) {
+    .model-figure.wide {
+      margin-inline: 0;
+    }
+
+    .debate-flow,
+    .agent-routing {
+      grid-template-columns: 1fr;
+    }
+  }
+`}</style>
