@@ -1,0 +1,38 @@
+---
+title: 'Where I would trust Jev in a cloud workflow'
+description: 'A decision oracle for ambiguous state transitions, with a narrower role in judging agents.'
+pubDate: 2026-09-21
+tags: ['cloud', 'agentic-ai', 'infrastructure', 'jev']
+---
+
+import JevWorkflow from '../../components/articles/JevWorkflow.astro';
+
+Jev is TypeSafe's first “System One” model, designed for structured decisions. You supply context and typed questions. It returns values and probabilities your software can use directly. TypeSafe describes a model trained with Reinforcement Learning for Calibrated Decisions, producing outputs in parallel instead of generating free-form text token by token. [The announcement](https://typesafe.ai/blog/introducing-system-one-models-and-jev) explains the approach.
+
+Think of an API that receives an incident summary and assesses whether it needs investigation. It produces a structured assessment, not a written diagnosis or a remediation script.
+
+**I would avoid Jev as the judge in most agent-evaluation use cases.** Put a rough number on it, and I would say 90%. That is my personal assessment, not a benchmark result.
+
+For exact checks, such as whether an agent called a required function with expected arguments, I would use code. For judging a complex execution, I would generally choose a strong reasoning model that can examine intermediate decisions and explain whether the result satisfies the task. That judge still needs validation.
+
+Jev has a place between those cases: narrow semantic judgments, such as whether an action matches a request expressed in natural language. TypeSafe even demonstrates [agent-trace evaluation](https://evals.typesafe.ai/agent_trace_observability). I would test that capability rather than dismiss it. But the published evaluation uses other models' answers as its reference, which does not establish correctness against real outcomes. [Evaluation methodology](https://evals.typesafe.ai/)
+
+My objection is about where I would place trust. Lack of generated reasoning does not prove an inability to reason. Still, TypeSafe's own [documentation](https://docs.typesafe.ai/introduction) recommends decomposing questions that require extended reasoning. I am more interested in using Jev at specific decision points than handing it the overall verdict on an agent's work.
+
+**A state machine gives those decisions a home.**
+
+A cloud workflow moves between defined states: monitoring, investigating, remediating, and recovering. Code specifies the allowed transitions. Jev could act as a decision oracle where a transition requires interpreting ambiguous evidence. “Oracle” here means an adviser, not an authority.
+
+<JevWorkflow />
+
+The probabilities above concern specific judgments. They are not probabilities of safe recovery. TypeSafe's separate `confidence` field summarizes the shape of an answer's probability distribution; it is not an independent safety check. [Confidence documentation](https://docs.typesafe.ai/confidence)
+
+**Operations is where I would start.** After a deployment, logs fill with errors. Jev receives a summary alongside metrics and deployment context, then assesses whether the pattern needs investigation. An LLM handles deeper correlation when needed. Critical alerts retain a direct path to on-call. Before any remediation, code checks the approved runbook's preconditions against actual system state.
+
+This also avoids treating two models as independent confirmation. If the LLM invents a diagnosis, Jev might confidently endorse a runbook for that diagnosis. Original evidence and executable checks still matter.
+
+**Security offers a similar routing problem.** Repeated authentication failures might indicate credential attacks or an expired integration secret. Jev could help decide which events deserve investigation. Blocking traffic needs stronger conditions than opening a case. Logs also contain attacker-controlled text, so that content must remain evidence, never instructions or authorization.
+
+**Infrastructure delivery is another candidate.** An LLM writes infrastructure code; the pipeline validates it and produces a plan. Jev assesses specific questions about the change and helps route it toward extra tests, a canary rollout, or human review. Mandatory policies remain enforced. The same pattern could inform demand-driven provisioning, within explicit budget and capacity limits.
+
+I would first run Jev alongside an existing workflow without giving it control. Measure missed incidents, unnecessary investigations, and how its probabilities compare with outcomes. Give it responsibility for one narrow transition only after those results justify it.

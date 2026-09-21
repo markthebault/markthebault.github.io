@@ -1,0 +1,84 @@
+<figure class="jev-flow" aria-labelledby="jev-title" aria-describedby="jev-caption">
+  <header class="flow-head">
+    <span class="eyeline">FIELD NOTES / 01</span>
+    <strong id="jev-title">From signal to response</strong>
+    <p>Jev assesses. Code routes. Checks govern execution.</p>
+  </header>
+
+  <div class="flow-body">
+    <div class="signal"><span class="status-dot" aria-hidden="true"></span><strong>Monitoring</strong><span>New error pattern after a deployment</span></div>
+    <div class="override"><span>PRIORITY RULE</span> Critical alert? Page on-call directly.</div>
+    <div class="connector" aria-hidden="true">↓</div>
+    <section class="decision" aria-label="First Jev decision">
+      <div class="step-label"><span>01 / JEV ASSESSMENT</span><span class="pill">AMBIGUOUS</span></div>
+      <strong>Does this need investigation?</strong>
+      <p>Logs + metrics + deployment context</p>
+      <div class="probability"><span>P(actionable)</span><b>0.72</b></div>
+      <div class="meter" aria-hidden="true"><span style="width:72%"></span></div>
+    </section>
+    <div class="branches">
+      <div class="branch"><span class="condition">↓ P &lt; 0.20</span><strong>Observe</strong><p>Recheck on a timer. Persistent errors return to assessment.</p></div>
+      <div class="branch selected"><span class="condition">↓ P ≥ 0.20</span><strong>Investigate</strong><p>An LLM correlates evidence and proposes a diagnosis.</p><span class="path-tag">EXAMPLE PATH</span></div>
+    </div>
+    <div class="connector continuation">From investigation ↓</div>
+    <section class="decision" aria-label="Second Jev decision after investigation">
+      <div class="step-label"><span>02 / JEV ASSESSMENT</span><span class="pill">AMBIGUOUS</span></div>
+      <strong>Does an approved runbook apply?</strong>
+      <p>Original evidence + investigation findings + runbook</p>
+      <div class="probability"><span>P(applicable)</span><b>0.97</b></div>
+      <div class="meter" aria-hidden="true"><span style="width:97%"></span></div>
+    </section>
+    <div class="branches">
+      <div class="branch"><span class="condition">↓ P &lt; 0.95 OR checks fail</span><strong>Review</strong><p>Gather evidence or ask a human. Page if urgency requires it.</p></div>
+      <div class="branch selected"><span class="condition">↓ P ≥ 0.95 AND checks pass</span><strong>Remediate</strong><p>Code verifies permissions and live preconditions before execution.</p><span class="path-tag">EXAMPLE PATH</span></div>
+    </div>
+    <div class="connector continuation">After remediation ↓</div>
+    <div class="verify"><span class="step-label">03 / EXECUTABLE HEALTH CHECKS</span><strong>Did the service recover?</strong><div class="outcomes"><span><b>PASS</b> Return to monitoring</span><span><b>FAIL</b> Stop automation and page</span></div></div>
+    <p class="fallback">Missing or unusable model output → investigation or human review.</p>
+  </div>
+  <figcaption id="jev-caption">A proposed incident workflow. Scores and thresholds are illustrative, not measured or recommended operating values. Blue marks one example path; probabilities do not certify safety.</figcaption>
+</figure>
+
+<style>
+  .jev-flow { margin-block: 2rem; border: 1px solid var(--hairline-strong); background: #faf9f5; box-shadow: 0 12px 32px #14244008; }
+  .flow-head { padding: 1.5rem; background: var(--ink); color: #f5f3ec; }
+  .eyeline { display: block; font: .65rem var(--font-mono); letter-spacing: .12em; color: #b7c9e0; margin-bottom: .65rem; }
+  .flow-head > strong { font: 1.65rem var(--font-display); }
+  .flow-head p { margin-top: .5rem; font-size: .86rem; color: #d4dce7; }
+  .flow-body { padding: 1.5rem; }
+  .signal { display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; font-size: .9rem; }
+  .signal > span:last-child { flex-basis: 100%; color: var(--ink-soft); font-size: .82rem; padding-left: 1rem; }
+  .status-dot { width: .45rem; height: .45rem; background: #327460; border-radius: 50%; }
+  .override { margin-top: 1rem; border-left: 2px solid #956030; padding: .55rem .7rem; background: #f4eee3; font-size: .78rem; }
+  .override span { display: block; font: .6rem var(--font-mono); color: #76502b; margin-bottom: .2rem; }
+  .connector { text-align: center; color: var(--blueprint); font-size: 1.2rem; height: 2rem; }
+  .continuation { font: .65rem/2rem var(--font-mono); }
+  .decision { padding: 1rem 1.1rem; background: #edf3fa; border: 1px solid #b3c9e2; border-top: 3px solid var(--blueprint); }
+  .step-label { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .4rem; font: .61rem var(--font-mono); letter-spacing: .04em; color: #355a80; }
+  .pill { border: 1px solid #b3c9e2; padding: .15rem .35rem; font-size: .55rem; }
+  .decision > strong, .verify > strong { display: block; font-size: 1rem; margin-top: .6rem; }
+  .decision p { font-size: .78rem; margin-top: .2rem; color: var(--ink-soft); }
+  .probability { display: flex; align-items: baseline; justify-content: space-between; margin-top: .85rem; font: .7rem var(--font-mono); }
+  .probability b { font-size: 1.25rem; color: var(--blueprint-deep); }
+  .meter { height: 5px; background: #d4e0ed; margin-top: .3rem; }
+  .meter span { display: block; height: 100%; background: var(--blueprint); }
+  .branches { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: .75rem; }
+  .branch { padding: .85rem; border: 1px solid var(--hairline); background: #f3f1e9; }
+  .branch.selected { background: #f1f6fc; border-color: #b3c9e2; }
+  .condition { display: block; font: .6rem/1.6 var(--font-mono); color: var(--ink-soft); margin-bottom: .45rem; }
+  .branch > strong { font-size: .95rem; }
+  .branch p { margin-top: .3rem; font-size: .78rem; line-height: 1.55; color: var(--ink-soft); }
+  .path-tag { display: inline-block; margin-top: .7rem; font: .55rem var(--font-mono); letter-spacing: .06em; color: var(--blueprint-deep); }
+  .verify { padding: 1rem; border: 1px solid #b4c9bc; background: #edf3ee; }
+  .verify .step-label { color: #365c47; }
+  .outcomes { display: grid; gap: .4rem; margin-top: .75rem; font-size: .78rem; }
+  .outcomes b { display: inline-block; min-width: 3rem; font: .65rem var(--font-mono); }
+  .fallback { margin-top: 1rem; font-size: .73rem; color: var(--ink-soft); }
+  figcaption { border-top: 1px solid var(--hairline); padding: 1rem 1.5rem; color: var(--ink-soft); font-size: .75rem; line-height: 1.6; }
+  @media (max-width: 420px) {
+    .flow-head, .flow-body { padding: 1rem; }
+    .branches { grid-template-columns: 1fr; }
+    .branch.selected { border-left: 3px solid var(--blueprint); }
+    figcaption { padding: 1rem; }
+  }
+</style>
